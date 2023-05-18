@@ -1,0 +1,153 @@
+import 'package:car_rental/constants/app_colors.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
+import 'package:intl_phone_field/phone_number.dart';
+
+class AppField extends StatelessWidget {
+  final TextEditingController? controller;
+  final String? hintText;
+  final Widget? suffixIcon, prefixIcon;
+  final EdgeInsetsGeometry? contentPadding;
+  final bool isObsecure;
+  final TextInputType? inputType;
+  final void Function(String value)? onChanged;
+  final int? maxLength, maxLines;
+  const AppField({
+    Key? key,
+    this.contentPadding,
+    this.controller,
+    this.hintText,
+    this.suffixIcon,
+    this.inputType,
+    this.isObsecure = false,
+    this.prefixIcon,
+    this.onChanged,
+    this.maxLength,
+    this.maxLines = 1,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      textAlign: TextAlign.start,
+      maxLength: maxLength,
+      maxLines: maxLines,
+      onChanged: onChanged,
+      controller: controller,
+      obscureText: isObsecure,
+      keyboardType: inputType,
+      decoration: InputDecoration(
+        prefixIcon: prefixIcon,
+        filled: true,
+        fillColor: AppColors.primaryColor.withOpacity(0.05),
+        hintText: hintText,
+        hintStyle: GoogleFonts.dmSans(),
+        labelStyle: GoogleFonts.dmSans(),
+        suffixIcon: suffixIcon,
+        labelText: hintText,
+        border: InputBorder.none,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(
+            width: 1.5,
+            color: AppColors.primaryColor,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PhoneField extends StatelessWidget {
+  final TextEditingController? controller;
+  final String? hintText;
+  final Widget? suffixIcon;
+  final EdgeInsetsGeometry? contentPadding;
+  final bool isObsecure;
+  final void Function(PhoneNumber number)? onChanged;
+  const PhoneField({
+    Key? key,
+    this.contentPadding,
+    this.controller,
+    this.hintText,
+    this.suffixIcon,
+    this.isObsecure = false,
+    this.onChanged,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return IntlPhoneField(
+      initialCountryCode: "PK",
+      onChanged: onChanged,
+      controller: controller,
+      obscureText: isObsecure,
+      decoration: InputDecoration(
+        counterText: "",
+        filled: true,
+        fillColor: AppColors.primaryColor.withOpacity(0.05),
+        hintText: hintText,
+        hintStyle: GoogleFonts.dmSans(),
+        suffixIcon: suffixIcon,
+        border: InputBorder.none,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(
+            width: 1.5,
+            color: AppColors.primaryColor,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AppDropdownField extends StatelessWidget {
+  final List<DropdownMenuItem<dynamic>> items;
+  final String? hintText;
+  final void Function(dynamic value) onChanged;
+  const AppDropdownField({
+    Key? key,
+    required this.items,
+    required this.onChanged,
+    this.hintText,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField(
+      elevation: 12,
+      style: GoogleFonts.dmSans(),
+      borderRadius: BorderRadius.circular(10),
+      items: items,
+      icon: const Icon(
+        Icons.keyboard_arrow_down_rounded,
+      ),
+      onChanged: onChanged,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: AppColors.primaryColor.withOpacity(0.05),
+        hintText: hintText,
+        hintStyle: GoogleFonts.dmSans(),
+        border: InputBorder.none,
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(
+            width: 1.5,
+            color: AppColors.primaryColor,
+          ),
+        ),
+      ),
+    );
+  }
+}

@@ -1,0 +1,64 @@
+name: car_rental
+description: A new Flutter project.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.19.6 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.2
+  
+  #state_management
+  get: any 
+
+  #fonts
+  google_fonts: any
+
+  #image_utils
+  flutter_svg: any 
+  file_picker: any 
+
+  #form_fields
+  pinput: any 
+  intl_phone_field: any
+
+  #animations
+  flutter_spinkit: any
+  lottie: any
+  animated_notch_bottom_bar: any
+
+  #network_utils
+  cached_network_image: any
+  dio: any 
+  http: any
+
+  #local_database
+  hive_flutter: any
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+
+  flutter_lints: ^2.0.0
+  flutter_launcher_icons: "^0.13.1"
+
+flutter_launcher_icons:
+    android: "launcher_icon"
+    ios: true
+    image_path: "assets/images/logo.png"
+
+flutter:
+  uses-material-design: true
+ 
+  assets:
+    - assets/icons/
+    - assets/images/
+    - assets/animations/
