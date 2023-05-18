@@ -32,7 +32,7 @@ class RegistrationServices {
 
         if (value.statusCode == 200) {
           userModel = UserModel.fromJson(data);
-          box.put("userData", data);
+          box.put("userData", data['data']);
 
           box.put("loginToken", userModel.token);
           box.put("isLogedin", true);
@@ -54,6 +54,4 @@ class RegistrationServices {
       },
     );
   }
-
-  updateProfile() async {}
 }

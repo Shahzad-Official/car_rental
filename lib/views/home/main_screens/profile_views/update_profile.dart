@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:car_rental/constants/api_constants.dart';
 import 'package:car_rental/controllers/profile_page_controllers/update_profile_controller.dart';
+import 'package:car_rental/widgets/app_button.dart';
+import 'package:car_rental/widgets/app_cached_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,6 +12,7 @@ import '../../../../main.dart';
 import '../../../../models/user_model.dart';
 import '../../../../widgets/app_field.dart';
 import '../../../../widgets/app_text.dart';
+import '../../main_page.dart';
 
 class UpdateProfile extends StatefulWidget {
   const UpdateProfile({Key? key}) : super(key: key);
@@ -22,18 +25,21 @@ class _UpdateProfileState extends State<UpdateProfile> {
   final UpdateProfileController _controller =
       Get.put(UpdateProfileController());
   initializeData() {
-    _controller.firstName.text = userData.data!.firstname.toString();
-    _controller.lastName.text = userData.data!.lastname.toString();
-    _controller.email.text = userData.data!.email.toString();
-    _controller.profilePath.text = userData.data!.profile.toString();
+    _controller.firstName.text = userData.firstname.toString();
+    _controller.lastName.text = userData.lastname.toString();
+    _controller.email.text = userData.email.toString();
+    _controller.profilePath.text = userData.profile.toString();
+    _controller.phoneCode.text = userData.phoneCode.toString();
+    _controller.phoneCountry.text = userData.phoneCountry.toString();
+    _controller.phoneNumber.text = userData.phoneNumber.toString();
   }
 
-  UserModel userData = UserModel();
+  UserData userData = UserData();
   @override
   void initState() {
     var data = jsonEncode(box.get("userData"));
 
-    userData = UserModel.fromJson(jsonDecode(data));
+    userData = UserData.fromJson(jsonDecode(data));
     initializeData();
     super.initState();
   }
@@ -62,35 +68,82 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     ),
                   ],
                 ),
-                child: CircleAvatar(
-                  radius: 70,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: NetworkImage(
-                    "${ApiConstants.baseUrl}/${userData.data!.profile!}",
-                  ),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: Card(
-                      elevation: 10,
-                      shape: BeveledRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: SizedBox(
-                        height: 40,
-                        width: 40,
-                        child: Center(
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.edit,
-                              color:
-                                  Theme.of(context).textTheme.bodyMedium!.color,
+                child: GetBuilder<UpdateProfileController>(
+                  init: UpdateProfileController(),
+                  builder: (_) {
+                    return CircleAvatar(
+                      radius: 70,
+                      backgroundColor: Colors.transparent,
+                      backgroundImage:
+                          _.profile != null ? FileImage(_.profile!) : null,
+                      child: _.profile != null
+                          ? Align(
+                              alignment: Alignment.bottomRight,
+                              child: Card(
+                                elevation: 10,
+                                shape: BeveledRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: SizedBox(
+                                  height: 40,
+                                  width: 40,
+                                  child: Center(
+                                    child: IconButton(
+                                      onPressed: () {
+                                        _.pickProfile();
+                                      },
+                                      icon: Icon(
+                                        Icons.edit,
+                                        color: Theme.of(context)
+                                            .textTheme
+                                            .bodyMedium!
+                                            .color,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Stack(
+                              children: [
+                                Center(
+                                  child: AppCachedImage(
+                                    fit: BoxFit.cover,
+                                    shape: BoxShape.circle,
+                                    url: userData.profile.toString(),
+                                  ),
+                                ),
+                                Align(
+                                  alignment: Alignment.bottomRight,
+                                  child: Card(
+                                    elevation: 10,
+                                    shape: BeveledRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: SizedBox(
+                                      height: 40,
+                                      width: 40,
+                                      child: Center(
+                                        child: IconButton(
+                                          onPressed: () {
+                                            _.pickProfile();
+                                          },
+                                          icon: Icon(
+                                            Icons.edit,
+                                            color: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .color,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -108,6 +161,34 @@ class _UpdateProfileState extends State<UpdateProfile> {
             AppField(
               controller: _controller.email,
               hintText: "email",
+            ),
+            AppSpacing.heightSpace30,
+            PhoneField(
+              initialCountryCode: _controller.phoneCountry.text,
+              controller: _controller.phoneNumber,
+              hintText: "Phone Number",
+              onChanged: (number) {
+                _controller.phoneCode.text = number.countryCode;
+                _controller.phoneCountry.text = number.countryISOCode;
+              },
+            ),
+            AppSpacing.heightSpace40,
+            GetBuilder<UpdateProfileController>(
+              init: UpdateProfileController(),
+              initState: (_) {},
+              builder: (_) {
+                return AppButton(
+                  isLoading: _.isLoading,
+                  onTap: () async {
+                    await _.updateProfile();
+                    Get.deleteAll();
+                    Get.offAll(
+                      () => const MainPage(),
+                    );
+                  },
+                  text: "Update",
+                );
+              },
             ),
           ],
         ),

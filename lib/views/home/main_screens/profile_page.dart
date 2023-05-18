@@ -12,7 +12,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/app_spacing.dart';
-import '../../../models/user_data_adapter.dart';
 import '../../../widgets/app_cached_image.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -25,12 +24,12 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  UserModel userData = UserModel();
+  UserData userData = UserData();
   @override
   void initState() {
     var data = jsonEncode(box.get("userData"));
-
-    userData = UserModel.fromJson(jsonDecode(data));
+    print(data);
+    userData = UserData.fromJson(jsonDecode(data));
     super.initState();
   }
 
@@ -51,7 +50,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 height: 300,
                 width: double.maxFinite,
                 child: AppCachedImage(
-                  url: userData.data!.profile!,
+                  url: userData.profile.toString(),
                 ),
               ),
             ),

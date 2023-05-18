@@ -68,6 +68,7 @@ class PhoneField extends StatelessWidget {
   final Widget? suffixIcon;
   final EdgeInsetsGeometry? contentPadding;
   final bool isObsecure;
+  final String? initialCountryCode;
   final void Function(PhoneNumber number)? onChanged;
   const PhoneField({
     Key? key,
@@ -77,12 +78,13 @@ class PhoneField extends StatelessWidget {
     this.suffixIcon,
     this.isObsecure = false,
     this.onChanged,
+    this.initialCountryCode = "PK",
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return IntlPhoneField(
-      initialCountryCode: "PK",
+      initialCountryCode: initialCountryCode,
       onChanged: onChanged,
       controller: controller,
       obscureText: isObsecure,

@@ -6,7 +6,6 @@ import '../../main.dart';
 class HomePageController extends GetxController {
   List<RxBool> isSaved = List.generate(100000, (index) => false.obs);
   onSaved(int index, SingleCarModel data) {
-    isSaved[index].value = true;
     if (isSaved[index].value) {
       Map carData = {
         "_id": data.sId,
@@ -23,6 +22,7 @@ class HomePageController extends GetxController {
         "createdOn": data.createdOn,
       };
       List list = [];
+
       if (box.get("savedCars") == null || box.get("savedCars").length == 0) {
         list.add(carData);
 
@@ -30,6 +30,8 @@ class HomePageController extends GetxController {
       } else {
         list = box.get("savedCars");
         list.add(carData);
+
+        box.put("savedCars", list);
       }
     }
   }

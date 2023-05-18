@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:car_rental/constants/app_colors.dart';
 import 'package:car_rental/constants/app_spacing.dart';
 import 'package:car_rental/controllers/main_page_controllers/home_page_controller.dart';
 import 'package:car_rental/main.dart';
 import 'package:car_rental/models/brand_model.dart';
 import 'package:car_rental/models/car_model.dart';
+import 'package:car_rental/models/saved_car_model.dart';
 import 'package:car_rental/widgets/app_cached_image.dart';
 import 'package:car_rental/widgets/app_logo.dart';
 import 'package:car_rental/widgets/app_text.dart';
@@ -28,12 +31,15 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final HomePageController _controller = Get.put(HomePageController());
   bool get isLoading => widget.isLoading;
-  bool initializeData(int index, SingleCarModel carData) {
+  List<SavedCarModel> allSavedCars = [];
+  initializeData() {
     if (box.get("savedCars") != null) {
-      List list = box.get("savedCars");
-      return list.any((element) => element["_id"] == carData.sId);
-    } else {
-      return false;
+      allSavedCars.clear();
+      var data = jsonEncode(box.get("savedCars"));
+      var list = jsonDecode(data);
+      for (var i in list) {
+        allSavedCars.add(SavedCarModel.fromJson(i));
+      }
     }
   }
 
@@ -114,19 +120,27 @@ class _HomePageState extends State<HomePage> {
                                           alignment: Alignment.topRight,
                                           child: Obx(
                                             () {
+                                              initializeData();
                                               _controller.isSaved[index].value =
-                                                  initializeData(
-                                                index,
-                                                widget.carData.data![index],
-                                              );
+                                                  allSavedCars.any((el) =>
+                                                      el.sId ==
+                                                      widget.carData
+                                                          .data![index].sId);
                                               return IconButton(
                                                 onPressed: () {
                                                   if (_controller
                                                       .isSaved[index].value) {
-                                                    // _controller.isSaved[index]
-                                                    //     .value = false;
-                                                    // box.put("savedCars", null);
+                                                    print(jsonEncode(
+                                                        box.get("savedCars")));
+                                                    print(_controller
+                                                        .isSaved[0].value);
+                                                    print(_controller
+                                                        .isSaved[1].value);
+                                                    print(_controller
+                                                        .isSaved[2].value);
                                                   } else {
+                                                    _controller.isSaved[index]
+                                                        .value = true;
                                                     _controller.onSaved(
                                                         index,
                                                         widget.carData

@@ -1,5 +1,3 @@
-import 'package:car_rental/models/user_data_adapter.dart';
-
 class UserModel {
   String? message;
   UserData? data;
@@ -7,7 +5,7 @@ class UserModel {
 
   UserModel({message, data, token});
 
-  UserModel.fromJson(json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     data = json['data'] != null ? UserData.fromJson(json['data']) : null;
     token = json['token'];
@@ -24,20 +22,27 @@ class UserModel {
 
 class UserData {
   String? sId;
-
   String? profile;
-
   String? firstname;
-
   String? lastname;
-
   String? email;
-
   String? password;
-
   String? createdOn;
+  String? phoneCode;
+  String? phoneNumber;
+  String? phoneCountry;
 
-  UserData({sId, profile, firstname, lastname, email, password, createdOn});
+  UserData(
+      {sId,
+      profile,
+      firstname,
+      lastname,
+      email,
+      password,
+      createdOn,
+      phoneCode,
+      phoneNumber,
+      phoneCountry});
 
   UserData.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -47,6 +52,9 @@ class UserData {
     email = json['email'];
     password = json['password'];
     createdOn = json['createdOn'];
+    phoneCode = json['phoneCode'];
+    phoneNumber = json['phoneNumber'];
+    phoneCountry = json['phoneCountry'];
   }
 
   Map<String, dynamic> toJson() {
@@ -58,6 +66,9 @@ class UserData {
     data['email'] = email;
     data['password'] = password;
     data['createdOn'] = createdOn;
+    data['phoneCode'] = phoneCode;
+    data['phoneNumber'] = phoneNumber;
+    data['phoneCountry'] = phoneCountry;
     return data;
   }
 }

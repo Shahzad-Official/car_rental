@@ -6,11 +6,15 @@ import '../constants/api_constants.dart';
 class AppCachedImage extends StatelessWidget {
   final String url;
   final double? height, width;
+  final BoxShape shape;
+  final BoxFit? fit;
   const AppCachedImage({
     Key? key,
     this.height,
     required this.url,
     this.width,
+    this.shape = BoxShape.rectangle,
+    this.fit,
   }) : super(key: key);
 
   @override
@@ -22,8 +26,10 @@ class AppCachedImage extends StatelessWidget {
           height: height,
           width: width,
           decoration: BoxDecoration(
+            shape: shape,
             image: DecorationImage(
               image: imageProvider,
+              fit: fit,
             ),
           ),
         );
