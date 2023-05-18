@@ -130,14 +130,6 @@ class _HomePageState extends State<HomePage> {
                                                 onPressed: () {
                                                   if (_controller
                                                       .isSaved[index].value) {
-                                                    print(jsonEncode(
-                                                        box.get("savedCars")));
-                                                    print(_controller
-                                                        .isSaved[0].value);
-                                                    print(_controller
-                                                        .isSaved[1].value);
-                                                    print(_controller
-                                                        .isSaved[2].value);
                                                   } else {
                                                     _controller.isSaved[index]
                                                         .value = true;
