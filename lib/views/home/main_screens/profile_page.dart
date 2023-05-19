@@ -28,7 +28,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     var data = jsonEncode(box.get("userData"));
-    print(data);
+
     userData = UserData.fromJson(jsonDecode(data));
     super.initState();
   }

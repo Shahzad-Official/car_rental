@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:car_rental/constants/api_constants.dart';
 import 'package:car_rental/controllers/profile_page_controllers/update_profile_controller.dart';
 import 'package:car_rental/widgets/app_button.dart';
 import 'package:car_rental/widgets/app_cached_image.dart';
