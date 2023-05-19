@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:car_rental/views/home/main_page.dart';
 import 'package:car_rental/views/registration_screens/login.dart';
+import 'package:car_rental/widgets/app_internet_error.dart';
 import 'package:car_rental/widgets/app_logo.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
@@ -23,7 +27,17 @@ class _SplashScreenState extends State<SplashScreen> {
     Future.delayed(const Duration(seconds: 3), () {
       if (box.get("isLogedin") != null && isLogedin) {
         Get.offAll(
-          () => const MainPage(),
+          () => StreamBuilder<ConnectivityResult>(
+            stream: Connectivity().onConnectivityChanged,
+            builder: (context, snapshot) {
+              if (snapshot.data == null ||
+                  snapshot.data == ConnectivityResult.none) {
+                return const AppInternetError();
+              } else {
+                return const MainPage();
+              }
+            },
+          ),
         );
       } else {
         Get.offAll(

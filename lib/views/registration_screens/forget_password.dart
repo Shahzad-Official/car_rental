@@ -22,10 +22,9 @@ class ForgetPassword extends StatelessWidget {
       ),
       body: Padding(
         padding: AppSpacing.defaultPadding,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: ListView(
           children: [
+            AppSpacing.heightSpace30,
             Center(
               child: SvgPicture.asset(
                 "assets/icons/forget_pass_vector.svg",
@@ -40,10 +39,16 @@ class ForgetPassword extends StatelessWidget {
             ),
             AppSpacing.heightSpace10,
             const AppText(
-              text: "Enter your phone# to recieve OTP?",
+              text: "Enter your registered email and phone# to recieve OTP?",
               fontSize: 16,
+              lineHeight: 2,
             ),
             AppSpacing.heightSpace30,
+            AppField(
+              controller: _controller.email,
+              hintText: "Email",
+            ),
+            AppSpacing.heightSpace20,
             PhoneField(
               controller: _controller.phone,
               hintText: "Phone Number",
@@ -57,8 +62,9 @@ class ForgetPassword extends StatelessWidget {
               initState: (_) {},
               builder: (_) {
                 return AppButton(
-                  onTap: () {
-                    _.sendOtp();
+                  isLoading: _.isLoading,
+                  onTap: () async {
+                    await _.sendOtp();
                   },
                   text: "Continue",
                 );

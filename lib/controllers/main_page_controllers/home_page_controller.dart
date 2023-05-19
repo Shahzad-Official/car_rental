@@ -35,4 +35,15 @@ class HomePageController extends GetxController {
       }
     }
   }
+
+  unsaved(List allSavedCars, SingleCarModel carData) {
+    var data = allSavedCars
+        .where(
+          (element) => element["_id"] == carData.sId,
+        )
+        .first;
+
+    allSavedCars.remove(data);
+    box.put("savedCars", allSavedCars);
+  }
 }

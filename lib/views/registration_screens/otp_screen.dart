@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatelessWidget {
@@ -91,32 +92,17 @@ class OtpScreen extends StatelessWidget {
                   ),
                 ),
                 AppSpacing.heightSpace30,
-                AppButton(
-                  onTap: () {
-                    if (isSignUp) {
-                      Get.offAll(
-                        () => const Login(),
-                      );
-                    } else {
-                      Get.to(
-                        () => ResetPassword(),
-                      );
-                    }
-                    // Get.defaultDialog(
-                    //   title: "check your entered OTP",
-                    //   content: LottieBuilder.asset(
-                    //     "assets/animations/error.json",
-                    //     repeat: false,
-                    //     onLoaded: (p0) {
-                    //       Future.delayed(p0.duration, () {
-                    //         _controller.pin.text = "";
-                    //         Get.back();
-                    //       });
-                    //     },
-                    //   ),
-                    // );
+                GetBuilder<ForgetPasswordController>(
+                  init: ForgetPasswordController(),
+                  builder: (_) {
+                    return AppButton(
+                      isLoading: _.isVerificationLoading,
+                      onTap: () async {
+                        await _.verifyOtp(isSignUp);
+                      },
+                      text: "Verify",
+                    );
                   },
-                  text: "Verify",
                 ),
               ],
             ),

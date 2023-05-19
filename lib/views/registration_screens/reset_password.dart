@@ -1,16 +1,16 @@
 import 'package:car_rental/constants/app_spacing.dart';
 import 'package:car_rental/controllers/registration_controllers/forget_password_controller.dart';
-import 'package:car_rental/views/registration_screens/login.dart';
 import 'package:car_rental/widgets/app_button.dart';
 import 'package:car_rental/widgets/app_field.dart';
 import 'package:car_rental/widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 class ResetPassword extends StatelessWidget {
-  ResetPassword({Key? key}) : super(key: key);
+  ResetPassword({
+    Key? key,
+  }) : super(key: key);
   final ForgetPasswordController _controller =
       Get.put(ForgetPasswordController());
 
@@ -65,28 +65,17 @@ class ResetPassword extends StatelessWidget {
                 },
               ),
               AppSpacing.heightSpace30,
-              AppButton(
-                onTap: () {
-                  _controller.resetPassword();
-                  Get.defaultDialog(
-                    title: "Passwor has been reset successfully",
-                    content: LottieBuilder.asset(
-                      "assets/animations/verified.json",
-                      repeat: false,
-                      onLoaded: (p0) {
-                        Future.delayed(
-                          p0.duration,
-                          () {
-                            Get.offAll(
-                              () => const Login(),
-                            );
-                          },
-                        );
-                      },
-                    ),
+              GetBuilder<ForgetPasswordController>(
+                init: ForgetPasswordController(),
+                builder: (_) {
+                  return AppButton(
+                    isLoading: _.isLoading,
+                    onTap: () async {
+                      await _.resetPassword();
+                    },
+                    text: "Submit",
                   );
                 },
-                text: "Submit",
               ),
             ],
           ),

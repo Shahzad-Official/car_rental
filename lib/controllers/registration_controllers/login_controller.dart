@@ -1,5 +1,6 @@
 import 'package:car_rental/services/registration_services.dart';
 import 'package:car_rental/utils/app_snackbar.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -18,14 +19,22 @@ class LoginController extends GetxController {
     if (email.text.isEmpty || !email.text.isEmail) {
       AppSnackbar.snackbar(title: "Error", message: "Enter valid email!");
     } else {
-      isLoading = true;
-      update();
-      await _services.login(
-        email: email.text,
-        password: password.text,
-      );
-      isLoading = false;
-      update();
+      await Connectivity().checkConnectivity().then((value) async {
+        if (value == ConnectivityResult.none) {
+          AppSnackbar.snackbar(
+              title: "Error",
+              message: "Please check your internet connection!");
+        } else {
+          isLoading = true;
+          update();
+          await _services.login(
+            email: email.text,
+            password: password.text,
+          );
+          isLoading = false;
+          update();
+        }
+      });
     }
   }
 }

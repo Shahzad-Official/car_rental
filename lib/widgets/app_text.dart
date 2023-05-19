@@ -4,9 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 class AppText extends StatelessWidget {
   final String text;
   final FontWeight? fontWeight;
-  final double? fontSize;
+  final double? fontSize, lineHeight;
   final Color? color;
   final TextAlign? textAlign;
+
   const AppText({
     Key? key,
     required this.text,
@@ -14,6 +15,7 @@ class AppText extends StatelessWidget {
     this.fontSize,
     this.fontWeight,
     this.textAlign,
+    this.lineHeight,
   }) : super(key: key);
 
   @override
@@ -27,6 +29,7 @@ class AppText extends StatelessWidget {
         color: color,
         wordSpacing: 2,
         letterSpacing: 1,
+        height: lineHeight,
       ),
     );
   }

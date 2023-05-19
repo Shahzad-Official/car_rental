@@ -130,6 +130,13 @@ class _HomePageState extends State<HomePage> {
                                                 onPressed: () {
                                                   if (_controller
                                                       .isSaved[index].value) {
+                                                    _controller.isSaved[index]
+                                                        .value = false;
+                                                    _controller.unsaved(
+                                                      box.get("savedCars"),
+                                                      widget
+                                                          .carData.data![index],
+                                                    );
                                                   } else {
                                                     _controller.isSaved[index]
                                                         .value = true;
