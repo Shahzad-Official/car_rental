@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:car_rental/services/registration_services.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/foundation.dart';
@@ -8,7 +9,52 @@ import '../constants/api_constants.dart';
 import '../main.dart';
 
 class ProfileServices {
+  final RegistrationServices _services = RegistrationServices();
   String get token => box.get("loginToken");
+  signUp({
+    required File profile,
+    required String email,
+    required String password,
+    required String firstname,
+    required String lastname,
+    required String phoneCode,
+    required String phoneCountry,
+    required String phoneNumber,
+  }) async {
+    Map<String, dynamic> data = {
+      "profile": await dio.MultipartFile.fromFile(profile.path),
+      "email": email,
+      "password": password,
+      "firstname": firstname,
+      "lastname": lastname,
+      "phoneCode": phoneCode,
+      "phoneCountry": phoneCountry,
+      "phoneNumber": phoneNumber,
+    };
+
+    await Dio()
+        .post(
+      ApiConstants.baseUrl + ApiConstants.signUp,
+      data: FormData.fromMap(data),
+    )
+        .then((value) async {
+      if (value.statusCode == 201) {
+        await _services.sendOtp(
+          email: email,
+          number: phoneNumber,
+          phone: phoneCode + phoneNumber,
+          phoneCode: phoneCode,
+          isSignUp: true,
+        );
+      } else {
+        debugPrint(value.data);
+      }
+    }).catchError((err) {
+      debugPrint(err.toString());
+      debugPrint(err.response.data.toString());
+    });
+  }
+
   updateProfile({
     required String firstname,
     required String lastname,

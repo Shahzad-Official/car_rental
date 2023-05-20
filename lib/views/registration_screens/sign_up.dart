@@ -2,7 +2,6 @@ import 'package:car_rental/constants/app_spacing.dart';
 import 'package:car_rental/controllers/registration_controllers/forget_password_controller.dart';
 import 'package:car_rental/controllers/registration_controllers/signup_controller.dart';
 import 'package:car_rental/views/registration_screens/login.dart';
-import 'package:car_rental/views/registration_screens/otp_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +9,6 @@ import '../../constants/app_colors.dart';
 
 import '../../widgets/app_button.dart';
 import '../../widgets/app_field.dart';
-import '../../widgets/app_logo.dart';
 import '../../widgets/app_text.dart';
 
 class SignUp extends StatelessWidget {
@@ -32,12 +30,6 @@ class SignUp extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Center(
-                        child: AppLogo(
-                          height: 200,
-                          width: 200,
-                        ),
-                      ),
                       const AppText(
                         text: "Sign Up",
                         fontSize: 30,
@@ -49,7 +41,39 @@ class SignUp extends StatelessWidget {
                         text: "Register a New Account",
                         fontSize: 20,
                       ),
-                      AppSpacing.heightSpace50,
+                      AppSpacing.heightSpace20,
+                      Center(
+                        child: CircleAvatar(
+                          radius: 70,
+                          backgroundImage:
+                              _.profile == null ? null : FileImage(_.profile!),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: InkWell(
+                              onTap: () {
+                                _.pickProfile();
+                              },
+                              child: Card(
+                                elevation: 12,
+                                shape: BeveledRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: Theme.of(context)
+                                        .bottomNavigationBarTheme
+                                        .selectedIconTheme!
+                                        .color,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      AppSpacing.heightSpace30,
                       AppField(
                         controller: _.firstname,
                         hintText: "FirstName",
@@ -67,6 +91,7 @@ class SignUp extends StatelessWidget {
                         hintText: "Phone Number",
                         onChanged: (number) {
                           _.phoneCode = number.countryCode;
+                          _.phoneCountry = number.countryISOCode;
                         },
                       ),
                       AppSpacing.heightSpace30,
@@ -111,14 +136,12 @@ class SignUp extends StatelessWidget {
                       ),
                       AppSpacing.heightSpace30,
                       AppButton(
-                        onTap: () {
+                        isLoading: _.isLoading,
+                        onTap: () async {
+                          _controller.email = _.email;
                           _controller.phone = _.phone;
                           _controller.countryCode = _.phoneCode;
-                          Get.to(
-                            () => OtpScreen(
-                              isSignUp: true,
-                            ),
-                          );
+                          await _.signUp();
                         },
                         text: "Sign Up",
                       ),

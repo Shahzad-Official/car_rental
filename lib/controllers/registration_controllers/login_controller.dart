@@ -27,6 +27,10 @@ class LoginController extends GetxController {
         } else {
           isLoading = true;
           update();
+          await _services.updateUserStatus(
+            email: email.text,
+            isVerified: true,
+          );
           await _services.login(
             email: email.text,
             password: password.text,

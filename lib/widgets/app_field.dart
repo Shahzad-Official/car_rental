@@ -106,6 +106,20 @@ class PhoneField extends StatelessWidget {
             color: AppColors.primaryColor,
           ),
         ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(
+            width: 1.5,
+            color: Colors.red,
+          ),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+          borderSide: const BorderSide(
+            width: 1.5,
+            color: Colors.red,
+          ),
+        ),
       ),
     );
   }

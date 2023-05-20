@@ -13,7 +13,6 @@ import 'package:lottie/lottie.dart';
 import '../views/home/main_page.dart';
 import '../views/registration_screens/login.dart';
 import '../views/registration_screens/otp_screen.dart';
-import '../views/registration_screens/reset_password.dart';
 
 class RegistrationServices {
   Box box = Hive.box("Data");
@@ -31,7 +30,6 @@ class RegistrationServices {
       },
     ).then(
       (value) {
-        // debugPrint("login Data => ${value.body}");
         Map<String, dynamic> data = jsonDecode(value.body);
 
         if (value.statusCode == 200) {
@@ -49,7 +47,7 @@ class RegistrationServices {
             () => const MainPage(),
           );
         } else {
-          AppSnackbar.snackbar(title: "Error", message: data['error']);
+          AppSnackbar.snackbar(title: "Error", message: data['message']);
         }
       },
     ).catchError(
@@ -59,11 +57,37 @@ class RegistrationServices {
     );
   }
 
+  updateUserStatus({
+    required String email,
+    required bool isVerified,
+  }) async {
+    Map<String, dynamic> data = {
+      "email": email,
+      "isVerified": isVerified,
+    };
+
+    await put(
+      Uri.parse(
+        ApiConstants.baseUrl + ApiConstants.updateStatus,
+      ),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode(data),
+    ).then((value) {
+      var data = jsonDecode(value.body);
+      if (value.statusCode == 200) {
+        debugPrint(data.toString());
+      } else {
+        debugPrint(data.toString());
+      }
+    });
+  }
+
   sendOtp({
     required String email,
     required String phoneCode,
     required String number,
     required String phone,
+    required bool isSignUp,
   }) async {
     await post(
       Uri.parse(ApiConstants.baseUrl + ApiConstants.sendOtp),
@@ -78,29 +102,42 @@ class RegistrationServices {
         AppSnackbar.snackbar(
             title: "Message", message: "OTP has been sent successfully!");
         Get.to(
-          () => OtpScreen(),
+          () => OtpScreen(
+            isSignUp: isSignUp,
+          ),
         );
       }
       debugPrint(value.body);
       var data = jsonDecode(value.body);
       AppSnackbar.snackbar(title: "Error", message: data['message']);
-    }).catchError((err) {
-      debugPrint(err.toString());
-    });
+    }).catchError(
+      (err) {
+        debugPrint(err.toString());
+      },
+    );
   }
 
   bool otpIsVerified = false;
-  verifyOtp(String phoneNumber, String otp) async {
+  verifyOtp(
+    String phoneNumber,
+    String otp, {
+    required String email,
+  }) async {
     await post(
       Uri.parse(ApiConstants.baseUrl + ApiConstants.verifyOtp),
       body: {
         "phone": phoneNumber,
         "otp": otp,
       },
-    ).then((value) {
+    ).then((value) async {
       if (value.statusCode == 200) {
         AppSnackbar.snackbar(
             title: "Message", message: "OTP has been veified successfully!");
+
+        await updateUserStatus(
+          email: email,
+          isVerified: true,
+        );
         otpIsVerified = true;
       }
       debugPrint(value.body);

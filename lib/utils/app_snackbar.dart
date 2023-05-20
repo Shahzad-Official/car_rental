@@ -6,10 +6,12 @@ class AppSnackbar {
   static snackbar({
     required String title,
     required String message,
+    Duration? duration,
   }) {
     Get.snackbar(
       title,
       message,
+      duration: duration ?? const Duration(seconds: 2),
       titleText: AppText(
         text: title,
         fontSize: 17,

@@ -1,14 +1,11 @@
 import 'package:car_rental/constants/app_spacing.dart';
 import 'package:car_rental/controllers/registration_controllers/forget_password_controller.dart';
-import 'package:car_rental/views/registration_screens/login.dart';
-import 'package:car_rental/views/registration_screens/reset_password.dart';
 import 'package:car_rental/widgets/app_button.dart';
 import 'package:car_rental/widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:lottie/lottie.dart';
 import 'package:pinput/pinput.dart';
 
 class OtpScreen extends StatelessWidget {

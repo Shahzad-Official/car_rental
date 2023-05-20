@@ -8,11 +8,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 class ResetPassword extends StatelessWidget {
-  ResetPassword({
+  const ResetPassword({
     Key? key,
   }) : super(key: key);
-  final ForgetPasswordController _controller =
-      Get.put(ForgetPasswordController());
 
   @override
   Widget build(BuildContext context) {

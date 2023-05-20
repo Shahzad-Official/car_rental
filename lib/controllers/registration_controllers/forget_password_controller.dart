@@ -1,8 +1,5 @@
-import 'dart:math';
-
 import 'package:car_rental/services/registration_services.dart';
 import 'package:car_rental/utils/app_snackbar.dart';
-import 'package:car_rental/views/registration_screens/otp_screen.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -59,6 +56,7 @@ class ForgetPasswordController extends GetxController {
               number: phone.text,
               phone: completeNumber,
               phoneCode: countryCode,
+              isSignUp: false,
             );
             isLoading = false;
             update();
@@ -84,19 +82,36 @@ class ForgetPasswordController extends GetxController {
           } else {
             isVerificationLoading = true;
             update();
-            await _services.verifyOtp(completeNumber, pin.text);
+
+            await _services.verifyOtp(
+              completeNumber,
+              pin.text,
+              email: email.text,
+            );
+
             verified = _services.otpIsVerified;
             update();
             isVerificationLoading = false;
             update();
             if (verified) {
               if (isSignUp) {
-                Get.offAll(
-                  () => const Login(),
+                Get.defaultDialog(
+                  title: "",
+                  content: LottieBuilder.asset(
+                    "assets/animations/verified.json",
+                    repeat: false,
+                    onLoaded: (p0) {
+                      Future.delayed(p0.duration, () {
+                        Get.offAll(
+                          () => const Login(),
+                        );
+                      });
+                    },
+                  ),
                 );
               } else {
                 Get.to(
-                  () => ResetPassword(),
+                  () => const ResetPassword(),
                 );
               }
             } else {

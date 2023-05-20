@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                       (index) {
                         return Padding(
                           padding: index == 0
-                              ? const EdgeInsets.only(left: 20)
+                              ? const EdgeInsets.only(left: 20, bottom: 20)
                               : EdgeInsets.zero,
                           child: Card(
                             shape: BeveledRectangleBorder(
