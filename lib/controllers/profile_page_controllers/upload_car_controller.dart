@@ -34,7 +34,7 @@ class UploadCarController extends GetxController {
   }
 
   bool isLoading = false;
-  uploadCarData() async {
+  uploadCarData(context) async {
     if (carThumbnail == null) {
       AppSnackbar.snackbar(
           title: "Error", message: "Please select thumbnail image!");
@@ -64,6 +64,7 @@ class UploadCarController extends GetxController {
       isLoading = true;
       update();
       await _carServices.createCar(
+        context,
         carName: carName.text,
         description: description.text,
         pricePerDay: pricePerDay.text,
@@ -74,6 +75,7 @@ class UploadCarController extends GetxController {
         noOfSeats: noOfSeats.text,
         thumbnail: carThumbnail!,
       );
+
       isLoading = false;
       update();
     }

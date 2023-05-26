@@ -144,6 +144,7 @@ class _CreateCarState extends State<CreateCar> {
             AppField(
               controller: _controller.maxSpeed,
               hintText: "Car Maximum Speed",
+              inputType: TextInputType.number,
             ),
             AppSpacing.heightSpace20,
             AppField(
@@ -178,8 +179,7 @@ class _CreateCarState extends State<CreateCar> {
                 return AppButton(
                   isLoading: _.isLoading,
                   onTap: () async {
-                    await _.uploadCarData();
-                    Get.back();
+                    await _.uploadCarData(context);
                   },
                   text: "Create",
                 );

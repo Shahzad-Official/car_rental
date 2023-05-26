@@ -21,6 +21,7 @@ class RegistrationServices {
   login({
     required String email,
     required String password,
+    required bool isLoggedIn,
   }) async {
     await post(
       Uri.parse(ApiConstants.baseUrl + ApiConstants.login),
@@ -37,7 +38,7 @@ class RegistrationServices {
           box.put("userData", data['data']);
 
           box.put("loginToken", userModel.token);
-          box.put("isLogedin", true);
+          box.put("isLogedin", isLoggedIn);
           AppSnackbar.snackbar(
             title: "Message",
             message: userModel.message.toString(),

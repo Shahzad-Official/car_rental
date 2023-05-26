@@ -69,7 +69,8 @@ class CarServices {
     );
   }
 
-  createCar({
+  createCar(
+    context, {
     required String carName,
     required String description,
     required String pricePerDay,
@@ -108,8 +109,14 @@ class CarServices {
         .then((value) {
       debugPrint(value.data.toString());
       AppSnackbar.snackbar(title: "Success", message: value.data['message']);
+      Navigator.of(context).pop();
     }).catchError((err) {
       debugPrint(err.toString());
+      debugPrint(err.response.data.toString());
+      AppSnackbar.snackbar(
+        title: "Success",
+        message: err.response.data['error'].toString(),
+      );
     });
   }
 }

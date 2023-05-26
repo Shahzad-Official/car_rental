@@ -7,6 +7,7 @@ import 'package:car_rental/main.dart';
 import 'package:car_rental/models/brand_model.dart';
 import 'package:car_rental/models/car_model.dart';
 import 'package:car_rental/models/saved_car_model.dart';
+import 'package:car_rental/views/home/main_screens/homw_views/all_cars.dart';
 import 'package:car_rental/widgets/app_cached_image.dart';
 import 'package:car_rental/widgets/app_logo.dart';
 import 'package:car_rental/widgets/app_text.dart';
@@ -74,7 +75,13 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.w600,
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(
+                            () => AllCars(
+                              carsData: widget.carData,
+                            ),
+                          );
+                        },
                         child: const AppText(
                           text: "see all",
                           fontSize: 18,
@@ -90,7 +97,9 @@ class _HomePageState extends State<HomePage> {
                     direction: Axis.horizontal,
                     spacing: 20,
                     children: List.generate(
-                      widget.carData.data!.length,
+                      widget.carData.data!.length > 4
+                          ? 4
+                          : widget.carData.data!.length,
                       (index) {
                         return Padding(
                           padding: index == 0

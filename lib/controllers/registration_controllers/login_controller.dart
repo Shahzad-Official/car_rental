@@ -14,6 +14,12 @@ class LoginController extends GetxController {
     update();
   }
 
+  bool isRemembered = false;
+  rememberMe(bool value) {
+    isRemembered = value;
+    update();
+  }
+
   bool isLoading = false;
   validateUser() async {
     if (email.text.isEmpty || !email.text.isEmail) {
@@ -34,6 +40,7 @@ class LoginController extends GetxController {
           await _services.login(
             email: email.text,
             password: password.text,
+            isLoggedIn: isRemembered,
           );
           isLoading = false;
           update();

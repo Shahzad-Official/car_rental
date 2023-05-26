@@ -8,6 +8,7 @@ import 'package:car_rental/widgets/app_button.dart';
 import 'package:car_rental/widgets/app_field.dart';
 import 'package:car_rental/widgets/app_logo.dart';
 import 'package:car_rental/widgets/app_text.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -80,6 +81,29 @@ class Login extends StatelessWidget {
                             text: "Forgot Password?",
                           ),
                         ),
+                      ),
+                      Row(
+                        children: [
+                          const AppText(
+                            text: "Remember Me ",
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          const SizedBox(
+                            width: 20,
+                          ),
+                          Transform.scale(
+                            scale: 0.75,
+                            child: CupertinoSwitch(
+                              activeColor: AppColors.primaryColor,
+                              trackColor: Colors.grey,
+                              value: _.isRemembered,
+                              onChanged: (value) {
+                                _.rememberMe(value);
+                              },
+                            ),
+                          ),
+                        ],
                       ),
                       AppSpacing.heightSpace30,
                       AppButton(
