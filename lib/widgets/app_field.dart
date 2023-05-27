@@ -140,7 +140,6 @@ class AppDropdownField extends StatelessWidget {
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
       elevation: 12,
-      style: GoogleFonts.dmSans(),
       borderRadius: BorderRadius.circular(10),
       items: items,
       icon: const Icon(

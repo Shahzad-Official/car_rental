@@ -1,10 +1,11 @@
-import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:car_rental/views/home/main_screens/home_page.dart';
 import 'package:car_rental/views/home/main_screens/profile_page.dart';
 import 'package:car_rental/views/home/main_screens/saved_page.dart';
+import 'package:car_rental/widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import '../../services/brand_services.dart';
 import '../../services/car_services.dart';
@@ -18,7 +19,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late final PageController _pageController;
-
+  int selectedIndex = 0;
   final CarServices _carServices = CarServices();
   final BrandServices _brandServices = BrandServices();
   bool isLoading = false;
@@ -71,65 +72,80 @@ class _MainPageState extends State<MainPage> {
         ),
       ),
       extendBody: true,
-      bottomNavigationBar: AnimatedNotchBottomBar(
-        color: Theme.of(context).bottomNavigationBarTheme.backgroundColor!,
-        notchColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor!,
-        pageController: _pageController,
-        itemLabelStyle: GoogleFonts.plusJakartaSans(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-        ),
-        bottomBarItems: [
-          BottomBarItem(
-            itemLabel: "Home",
-            inActiveItem: SvgPicture.asset(
-              "assets/icons/home.svg",
-              // ignore: deprecated_member_use
-              color: Colors.grey,
-            ),
-            activeItem: SvgPicture.asset(
-              "assets/icons/home.svg",
-              // ignore: deprecated_member_use
+      bottomNavigationBar: SalomonBottomBar(
+        selectedItemColor:
+            Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
+        backgroundColor:
+            Theme.of(context).bottomNavigationBarTheme.backgroundColor!,
+        currentIndex: selectedIndex,
+        items: [
+          SalomonBottomBarItem(
+            title: AppText(
+              text: "Home",
               color: Theme.of(context)
                   .bottomNavigationBarTheme
                   .selectedIconTheme!
                   .color,
+            ),
+            icon: SvgPicture.asset(
+              "assets/icons/home.svg",
+              height: 30,
+              width: 30,
+              // ignore: deprecated_member_use
+              color: selectedIndex == 0
+                  ? Theme.of(context)
+                      .bottomNavigationBarTheme
+                      .selectedIconTheme!
+                      .color
+                  : Colors.grey,
             ),
           ),
-          BottomBarItem(
-            itemLabel: "Saved",
-            inActiveItem: SvgPicture.asset(
-              "assets/icons/saved.svg",
-              // ignore: deprecated_member_use
-              color: Colors.grey,
-            ),
-            activeItem: SvgPicture.asset(
-              "assets/icons/saved.svg",
-              // ignore: deprecated_member_use
+          SalomonBottomBarItem(
+            title: AppText(
+              text: "Saved",
               color: Theme.of(context)
                   .bottomNavigationBarTheme
                   .selectedIconTheme!
                   .color,
+            ),
+            icon: SvgPicture.asset(
+              "assets/icons/saved.svg",
+              height: 30,
+              width: 30,
+              // ignore: deprecated_member_use
+              color: selectedIndex == 1
+                  ? Theme.of(context)
+                      .bottomNavigationBarTheme
+                      .selectedIconTheme!
+                      .color
+                  : Colors.grey,
             ),
           ),
-          BottomBarItem(
-            itemLabel: "Profile",
-            inActiveItem: SvgPicture.asset(
-              "assets/icons/user.svg",
-              // ignore: deprecated_member_use
-              color: Colors.grey,
-            ),
-            activeItem: SvgPicture.asset(
-              "assets/icons/user.svg",
-              // ignore: deprecated_member_use
+          SalomonBottomBarItem(
+            title: AppText(
+              text: "Profile",
               color: Theme.of(context)
                   .bottomNavigationBarTheme
                   .selectedIconTheme!
                   .color,
+            ),
+            icon: SvgPicture.asset(
+              "assets/icons/user.svg", height: 30,
+              width: 30,
+              // ignore: deprecated_member_use
+              color: selectedIndex == 2
+                  ? Theme.of(context)
+                      .bottomNavigationBarTheme
+                      .selectedIconTheme!
+                      .color
+                  : Colors.grey,
             ),
           ),
         ],
         onTap: (value) {
+          setState(() {
+            selectedIndex = value;
+          });
           _pageController.animateToPage(
             value,
             curve: Curves.easeInOut,

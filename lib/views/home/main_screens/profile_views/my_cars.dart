@@ -42,7 +42,8 @@ class _MyCarsState extends State<MyCars> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : _carServices.carModel.data == null
+          : _carServices.carModel.data == null ||
+                  _carServices.carModel.data!.isEmpty
               ? const Center(
                   child: AppText(
                     text: "No cars available!",

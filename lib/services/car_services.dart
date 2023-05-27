@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:car_rental/constants/api_constants.dart';
 import 'package:car_rental/models/car_model.dart';
 import 'package:car_rental/utils/app_snackbar.dart';
+import 'package:car_rental/views/home/main_page.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/material.dart';
@@ -109,13 +110,17 @@ class CarServices {
         .then((value) {
       debugPrint(value.data.toString());
       AppSnackbar.snackbar(title: "Success", message: value.data['message']);
-      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const MainPage(),
+        ),
+      );
     }).catchError((err) {
       debugPrint(err.toString());
       debugPrint(err.response.data.toString());
       AppSnackbar.snackbar(
-        title: "Success",
-        message: err.response.data['error'].toString(),
+        title: "Error",
+        message: err.response.data['message'].toString(),
       );
     });
   }
