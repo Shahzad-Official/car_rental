@@ -18,7 +18,7 @@ class CarServices {
 
   getAllCars() async {
     await get(
-      Uri.parse(ApiConstants.baseUrl + ApiConstants.getAllCars),
+      Uri.parse(ApiConstants.baseUrl + ApiConstants.car),
       headers: {
         "Content-Type": "application/json",
         "Authorization": "Bearer $token",
@@ -98,7 +98,7 @@ class CarServices {
     };
     await Dio()
         .post(
-      ApiConstants.baseUrl + ApiConstants.createCar,
+      ApiConstants.baseUrl + ApiConstants.car,
       options: Options(
         headers: {
           "Content-Type": "application/json",

@@ -7,7 +7,9 @@ import 'package:car_rental/main.dart';
 import 'package:car_rental/models/brand_model.dart';
 import 'package:car_rental/models/car_model.dart';
 import 'package:car_rental/models/saved_car_model.dart';
-import 'package:car_rental/views/home/main_screens/homw_views/all_cars.dart';
+import 'package:car_rental/views/home/main_screens/brand_views/all_brands_page.dart';
+import 'package:car_rental/views/home/main_screens/car_views/all_cars.dart';
+import 'package:car_rental/views/home/main_screens/car_views/single_car_view.dart';
 import 'package:car_rental/widgets/app_cached_image.dart';
 import 'package:car_rental/widgets/app_logo.dart';
 import 'package:car_rental/widgets/app_text.dart';
@@ -78,7 +80,7 @@ class _HomePageState extends State<HomePage> {
                         onPressed: () {
                           Get.to(
                             () => AllCars(
-                              carsData: widget.carData,
+                              carModel: widget.carData,
                             ),
                           );
                         },
@@ -97,14 +99,10 @@ class _HomePageState extends State<HomePage> {
                     direction: Axis.horizontal,
                     spacing: 20,
                     children: List.generate(
-                      widget.carData.data!.length > 4
-                          ? 4
-                          : widget.carData.data!.length,
+                      widget.carData.data!.length > 4 ? 4 : widget.carData.data!.length,
                       (index) {
                         return Padding(
-                          padding: index == 0
-                              ? const EdgeInsets.only(left: 20, bottom: 20)
-                              : EdgeInsets.zero,
+                          padding: index == 0 ? const EdgeInsets.only(left: 20, bottom: 20) : EdgeInsets.zero,
                           child: Card(
                             shape: BeveledRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
@@ -120,50 +118,45 @@ class _HomePageState extends State<HomePage> {
                                   Expanded(
                                     child: Stack(
                                       children: [
-                                        AppCachedImage(
-                                          url: widget
-                                              .carData.data![index].thumbnail
-                                              .toString(),
+                                        InkWell(
+                                          onTap: () {
+                                            Get.to(
+                                              () => SingleCarView(carData: widget.carData, index: index),
+                                            );
+                                          },
+                                          child: Hero(
+                                            tag: "car$index",
+                                            child: AppCachedImage(
+                                              url: widget.carData.data![index].thumbnail.toString(),
+                                            ),
+                                          ),
                                         ),
                                         Align(
                                           alignment: Alignment.topRight,
                                           child: Obx(
                                             () {
                                               initializeData();
-                                              _controller.isSaved[index].value =
-                                                  allSavedCars.any((el) =>
-                                                      el.sId ==
-                                                      widget.carData
-                                                          .data![index].sId);
+                                              _controller.isSaved[index].value = allSavedCars.any((el) => el.sId == widget.carData.data![index].sId);
                                               return IconButton(
                                                 onPressed: () {
-                                                  if (_controller
-                                                      .isSaved[index].value) {
-                                                    _controller.isSaved[index]
-                                                        .value = false;
+                                                  if (_controller.isSaved[index].value) {
+                                                    _controller.isSaved[index].value = false;
                                                     _controller.unsaved(
                                                       box.get("savedCars"),
-                                                      widget
-                                                          .carData.data![index],
+                                                      widget.carData.data![index],
                                                     );
                                                   } else {
-                                                    _controller.isSaved[index]
-                                                        .value = true;
-                                                    _controller.onSaved(
-                                                        index,
-                                                        widget.carData
-                                                            .data![index]);
+                                                    _controller.isSaved[index].value = true;
+                                                    _controller.onSaved(index, widget.carData.data![index]);
                                                   }
                                                 },
-                                                icon: _controller
-                                                        .isSaved[index].value
+                                                icon: _controller.isSaved[index].value
                                                     ? const Icon(
                                                         Icons.bookmark_outlined,
                                                         size: 30,
                                                       )
                                                     : const Icon(
-                                                        Icons
-                                                            .bookmark_border_rounded,
+                                                        Icons.bookmark_border_rounded,
                                                         size: 30,
                                                       ),
                                               );
@@ -175,15 +168,13 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                   AppSpacing.heightSpace5,
                                   AppText(
-                                    text: widget.carData.data![index].carname
-                                        .toString(),
+                                    text: widget.carData.data![index].carname.toString(),
                                     fontSize: 17,
                                     fontWeight: FontWeight.w600,
                                   ),
                                   AppSpacing.heightSpace10,
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       const AppText(
                                         text: "Rent Per Day",
@@ -191,8 +182,7 @@ class _HomePageState extends State<HomePage> {
                                         fontWeight: FontWeight.w500,
                                       ),
                                       AppText(
-                                        text:
-                                            "RS. ${widget.carData.data![index].pricePerDay.toString()}",
+                                        text: "RS. ${widget.carData.data![index].pricePerDay.toString()}",
                                         fontSize: 14,
                                         fontWeight: FontWeight.w700,
                                         color: AppColors.primaryColor,
@@ -219,7 +209,13 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.w600,
                       ),
                       TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Get.to(
+                            () => AllBrandsPage(
+                              brands: widget.brandData,
+                            ),
+                          );
+                        },
                         child: const AppText(
                           text: "see all",
                           fontSize: 18,
@@ -237,38 +233,67 @@ class _HomePageState extends State<HomePage> {
                       widget.brandData.data!.length,
                       (index) {
                         return Padding(
-                          padding: index == 0
-                              ? const EdgeInsets.only(left: 20)
-                              : EdgeInsets.zero,
-                          child: Card(
-                            shape: BeveledRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            elevation: 10,
-                            child: Container(
-                              padding: const EdgeInsets.all(5),
-                              height: 170,
-                              width: 150,
-                              child: Column(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: AppCachedImage(
-                                        url: widget.brandData.data![index].logo
-                                            .toString(),
+                          padding: index == 0 ? const EdgeInsets.only(left: 20) : EdgeInsets.zero,
+                          child: InkWell(
+                            onTap: () {
+                              Get.to(
+                                () => AllCars(
+                                  brandId: widget.brandData.data![index].sId,
+                                  appBar: AppBar(
+                                    centerTitle: false,
+                                    title: SizedBox(
+                                      width: double.maxFinite,
+                                      child: Row(
+                                        children: [
+                                          AppCachedImage(
+                                            height: 50,
+                                            width: 50,
+                                            url: widget.brandData.data![index].logo.toString(),
+                                          ),
+                                          const SizedBox(
+                                            width: 10,
+                                          ),
+                                          AppText(
+                                            text: widget.brandData.data![index].name.toString(),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
-                                  AppSpacing.heightSpace5,
-                                  AppText(
-                                    text: widget.brandData.data![index].name
-                                        .toString(),
-                                    fontSize: 17,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  AppSpacing.heightSpace10,
-                                ],
+                                ),
+                              );
+                            },
+                            child: Card(
+                              shape: BeveledRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 10,
+                              child: Container(
+                                padding: const EdgeInsets.all(5),
+                                height: 170,
+                                width: 150,
+                                child: Column(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Hero(
+                                          tag: "brand$index",
+                                          child: AppCachedImage(
+                                            url: widget.brandData.data![index].logo.toString(),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    AppSpacing.heightSpace5,
+                                    AppText(
+                                      text: widget.brandData.data![index].name.toString(),
+                                      fontSize: 17,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                    AppSpacing.heightSpace10,
+                                  ],
+                                ),
                               ),
                             ),
                           ),

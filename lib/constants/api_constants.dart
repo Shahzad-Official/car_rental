@@ -1,14 +1,22 @@
 class ApiConstants {
   static const baseUrl = "https://api.hexon.online";
+
+  //auth endpoints
   static const login = "/auth/login";
   static const signUp = "/auth/signUp";
+  static const sendOtp = "/auth/send_otp";
+  static const verifyOtp = "/auth/verify_otp";
+
+  //user endpoints
   static const resetPassword = "/user/resetPassword";
   static const updateProfile = "/user/updateProfile";
   static const updateStatus = "/user/updateStatus";
-  static const sendOtp = "/auth/send_otp";
-  static const verifyOtp = "/auth/verify_otp";
-  static const getAllCars = "/car/allCars";
-  static const myCars = "/car/myCars";
-  static const createCar = "/car/createCar";
-  static const allBrands = "/brand/allBrands";
+
+  //car endpoints
+  static const myCars = "/car/user";
+  static const car = "/car";
+
+  //brand endpoints
+  static const brand = "/brand";
+  static const brandCars = "/brand/cars";
 }

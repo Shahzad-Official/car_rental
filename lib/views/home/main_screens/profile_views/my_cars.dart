@@ -1,6 +1,8 @@
 import 'package:car_rental/services/car_services.dart';
+import 'package:car_rental/views/home/main_screens/car_views/single_car_view.dart';
 import 'package:car_rental/widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../constants/app_colors.dart';
 import '../../../../constants/app_spacing.dart';
@@ -42,8 +44,7 @@ class _MyCarsState extends State<MyCars> {
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : _carServices.carModel.data == null ||
-                  _carServices.carModel.data!.isEmpty
+          : _carServices.carModel.data == null || _carServices.carModel.data!.isEmpty
               ? const Center(
                   child: AppText(
                     text: "No cars available!",
@@ -69,23 +70,33 @@ class _MyCarsState extends State<MyCars> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
-                                child: AppCachedImage(
-                                  url: _carServices
-                                      .carModel.data![index].thumbnail
-                                      .toString(),
+                                child: InkWell(
+                                  onTap: () {
+                                    Get.to(
+                                      () => SingleCarView(
+                                        isMyCar: true,
+                                        index: index,
+                                        carData: _carServices.carModel,
+                                      ),
+                                    );
+                                  },
+                                  child: Hero(
+                                    tag: "car$index",
+                                    child: AppCachedImage(
+                                      url: _carServices.carModel.data![index].thumbnail.toString(),
+                                    ),
+                                  ),
                                 ),
                               ),
                               AppSpacing.heightSpace5,
                               AppText(
-                                text: _carServices.carModel.data![index].carname
-                                    .toString(),
+                                text: _carServices.carModel.data![index].carname.toString(),
                                 fontSize: 17,
                                 fontWeight: FontWeight.w600,
                               ),
                               AppSpacing.heightSpace10,
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const AppText(
                                     text: "Rent Per Day",
@@ -93,8 +104,7 @@ class _MyCarsState extends State<MyCars> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                   AppText(
-                                    text:
-                                        "RS. ${_carServices.carModel.data![index].pricePerDay.toString()}",
+                                    text: "RS. ${_carServices.carModel.data![index].pricePerDay.toString()}",
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.primaryColor,

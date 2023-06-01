@@ -1,7 +1,9 @@
 import 'package:car_rental/constants/app_spacing.dart';
 import 'package:car_rental/main.dart';
 import 'package:car_rental/models/car_model.dart';
+import 'package:car_rental/views/home/main_screens/car_views/single_car_view.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../widgets/app_cached_image.dart';
@@ -75,8 +77,21 @@ class _SavedPageState extends State<SavedPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Expanded(
-                                child: AppCachedImage(
-                                  url: allCars[index].thumbnail.toString(),
+                                child: InkWell(
+                                  onTap: () {
+                                    Get.to(
+                                      () => SingleCarView(
+                                        index: index,
+                                        savedCarData: allCars,
+                                      ),
+                                    );
+                                  },
+                                  child: Hero(
+                                    tag: "car$index",
+                                    child: AppCachedImage(
+                                      url: allCars[index].thumbnail.toString(),
+                                    ),
+                                  ),
                                 ),
                               ),
                               AppSpacing.heightSpace5,
@@ -87,8 +102,7 @@ class _SavedPageState extends State<SavedPage> {
                               ),
                               AppSpacing.heightSpace10,
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   const AppText(
                                     text: "Rent Per Day",
@@ -96,8 +110,7 @@ class _SavedPageState extends State<SavedPage> {
                                     fontWeight: FontWeight.w500,
                                   ),
                                   AppText(
-                                    text:
-                                        "RS. ${allCars[index].pricePerDay.toString()}",
+                                    text: "RS. ${allCars[index].pricePerDay.toString()}",
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     color: AppColors.primaryColor,
