@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const baseUrl = "https://api.hexon.online";
+  static const baseUrl = "http://192.168.216.70:3000";
 
   //auth endpoints
   static const login = "/auth/login";

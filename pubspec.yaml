@@ -32,6 +32,7 @@ dependencies:
   flutter_spinkit: any
   lottie: any
   salomon_bottom_bar: any
+  shimmer: any
 
   #network_utils
   cached_network_image: any

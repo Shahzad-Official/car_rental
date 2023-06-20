@@ -7,9 +7,6 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
-import '../../services/brand_services.dart';
-import '../../services/car_services.dart';
-
 class MainPage extends StatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
@@ -20,27 +17,13 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late final PageController _pageController;
   int selectedIndex = 0;
-  final CarServices _carServices = CarServices();
-  final BrandServices _brandServices = BrandServices();
-  bool isLoading = false;
-  getData() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    await _carServices.getAllCars();
-    await _brandServices.getAllBrands();
-    setState(() {
-      isLoading = false;
-    });
-  }
 
   @override
   void initState() {
     _pageController = PageController(
       keepPage: false,
     );
-    getData();
+
     super.initState();
   }
 
@@ -52,11 +35,7 @@ class _MainPageState extends State<MainPage> {
 
   int currentIndex = 0;
   List<Widget> get allPages => [
-        HomePage(
-          brandData: _brandServices.brandModel,
-          carData: _carServices.carModel,
-          isLoading: isLoading,
-        ),
+        HomePage(),
         const SavedPage(),
         const ProfilePage(),
       ];
@@ -73,72 +52,46 @@ class _MainPageState extends State<MainPage> {
       ),
       extendBody: true,
       bottomNavigationBar: SalomonBottomBar(
-        selectedItemColor:
-            Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
-        backgroundColor:
-            Theme.of(context).bottomNavigationBarTheme.backgroundColor!,
+        selectedItemColor: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
+        backgroundColor: Theme.of(context).bottomNavigationBarTheme.backgroundColor!,
         currentIndex: selectedIndex,
         items: [
           SalomonBottomBarItem(
             title: AppText(
               text: "Home",
-              color: Theme.of(context)
-                  .bottomNavigationBarTheme
-                  .selectedIconTheme!
-                  .color,
+              color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
             ),
             icon: SvgPicture.asset(
               "assets/icons/home.svg",
               height: 30,
               width: 30,
               // ignore: deprecated_member_use
-              color: selectedIndex == 0
-                  ? Theme.of(context)
-                      .bottomNavigationBarTheme
-                      .selectedIconTheme!
-                      .color
-                  : Colors.grey,
+              color: selectedIndex == 0 ? Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color : Colors.grey,
             ),
           ),
           SalomonBottomBarItem(
             title: AppText(
               text: "Saved",
-              color: Theme.of(context)
-                  .bottomNavigationBarTheme
-                  .selectedIconTheme!
-                  .color,
+              color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
             ),
             icon: SvgPicture.asset(
               "assets/icons/saved.svg",
               height: 30,
               width: 30,
               // ignore: deprecated_member_use
-              color: selectedIndex == 1
-                  ? Theme.of(context)
-                      .bottomNavigationBarTheme
-                      .selectedIconTheme!
-                      .color
-                  : Colors.grey,
+              color: selectedIndex == 1 ? Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color : Colors.grey,
             ),
           ),
           SalomonBottomBarItem(
             title: AppText(
               text: "Profile",
-              color: Theme.of(context)
-                  .bottomNavigationBarTheme
-                  .selectedIconTheme!
-                  .color,
+              color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
             ),
             icon: SvgPicture.asset(
               "assets/icons/user.svg", height: 30,
               width: 30,
               // ignore: deprecated_member_use
-              color: selectedIndex == 2
-                  ? Theme.of(context)
-                      .bottomNavigationBarTheme
-                      .selectedIconTheme!
-                      .color
-                  : Colors.grey,
+              color: selectedIndex == 2 ? Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color : Colors.grey,
             ),
           ),
         ],

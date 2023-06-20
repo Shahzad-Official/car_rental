@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 class UploadCarController extends GetxController {
   TextEditingController carName = TextEditingController();
   TextEditingController brandId = TextEditingController();
+  String? brandName;
   TextEditingController noOfSeats = TextEditingController();
   TextEditingController maxSpeed = TextEditingController();
   TextEditingController pricePerDay = TextEditingController();
@@ -36,30 +37,23 @@ class UploadCarController extends GetxController {
   bool isLoading = false;
   uploadCarData(context) async {
     if (carThumbnail == null) {
-      AppSnackbar.snackbar(
-          title: "Error", message: "Please select thumbnail image!");
+      AppSnackbar.snackbar(title: "Error", message: "Please select thumbnail image!");
     } else if (carName.text.isEmpty) {
       AppSnackbar.snackbar(title: "Error", message: "Please enter carName!");
     } else if (brandId.text.isEmpty) {
       AppSnackbar.snackbar(title: "Error", message: "Please select brand!");
     } else if (noOfSeats.text.isEmpty) {
-      AppSnackbar.snackbar(
-          title: "Error", message: "Please enter seats of car!");
+      AppSnackbar.snackbar(title: "Error", message: "Please enter seats of car!");
     } else if (maxSpeed.text.isEmpty) {
-      AppSnackbar.snackbar(
-          title: "Error", message: "Please enter car max speed!");
+      AppSnackbar.snackbar(title: "Error", message: "Please enter car max speed!");
     } else if (pricePerDay.text.isEmpty) {
-      AppSnackbar.snackbar(
-          title: "Error", message: "Please enter car rent per day!");
+      AppSnackbar.snackbar(title: "Error", message: "Please enter car rent per day!");
     } else if (priceHalfWeek.text.isEmpty) {
-      AppSnackbar.snackbar(
-          title: "Error", message: "Please enter car rent for half week!");
+      AppSnackbar.snackbar(title: "Error", message: "Please enter car rent for half week!");
     } else if (pricePerWeek.text.isEmpty) {
-      AppSnackbar.snackbar(
-          title: "Error", message: "Please enter car one week rent!");
+      AppSnackbar.snackbar(title: "Error", message: "Please enter car one week rent!");
     } else if (description.text.isEmpty) {
-      AppSnackbar.snackbar(
-          title: "Error", message: "Please enter some car description!");
+      AppSnackbar.snackbar(title: "Error", message: "Please enter some car description!");
     } else {
       isLoading = true;
       update();

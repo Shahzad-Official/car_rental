@@ -14,8 +14,7 @@ class OtpScreen extends StatelessWidget {
     Key? key,
     this.isSignUp = false,
   }) : super(key: key);
-  final ForgetPasswordController _controller =
-      Get.put(ForgetPasswordController());
+  final ForgetPasswordController _controller = Get.put(ForgetPasswordController());
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +58,7 @@ class OtpScreen extends StatelessWidget {
                 ),
                 AppSpacing.heightSpace30,
                 Pinput(
+                  androidSmsAutofillMethod: AndroidSmsAutofillMethod.smsRetrieverApi,
                   controller: _controller.pin,
                   defaultPinTheme: PinTheme(
                     height: 60,

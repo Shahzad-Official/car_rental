@@ -3,6 +3,7 @@ import 'package:car_rental/constants/app_spacing.dart';
 import 'package:car_rental/controllers/profile_page_controllers/upload_car_controller.dart';
 import 'package:car_rental/services/brand_services.dart';
 import 'package:car_rental/widgets/app_button.dart';
+import 'package:car_rental/widgets/app_cached_image.dart';
 import 'package:car_rental/widgets/app_field.dart';
 import 'package:car_rental/widgets/app_text.dart';
 import 'package:flutter/material.dart';
@@ -72,8 +73,7 @@ class _CreateCarState extends State<CreateCar> {
                         child: _.carThumbnail != null
                             ? null
                             : Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 18.0),
+                                padding: const EdgeInsets.symmetric(horizontal: 18.0),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -82,10 +82,7 @@ class _CreateCarState extends State<CreateCar> {
                                       height: 50,
                                       width: 50,
                                       // ignore: deprecated_member_use
-                                      color: Theme.of(context)
-                                          .bottomNavigationBarTheme
-                                          .selectedIconTheme!
-                                          .color,
+                                      color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
                                     ),
                                     const SizedBox(
                                       width: 10,
@@ -93,10 +90,7 @@ class _CreateCarState extends State<CreateCar> {
                                     AppText(
                                       fontSize: 20,
                                       text: "Upload car thumbnail",
-                                      color: Theme.of(context)
-                                          .bottomNavigationBarTheme
-                                          .selectedIconTheme!
-                                          .color,
+                                      color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
                                     ),
                                   ],
                                 ),
@@ -123,8 +117,21 @@ class _CreateCarState extends State<CreateCar> {
                         .map(
                           (e) => DropdownMenuItem(
                             value: e.sId,
-                            child: AppText(
-                              text: e.name.toString(),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                AppText(
+                                  text: e.name.toString(),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                AppCachedImage(
+                                  height: 30,
+                                  width: 30,
+                                  url: e.logo.toString(),
+                                ),
+                              ],
                             ),
                           ),
                         )

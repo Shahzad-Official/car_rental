@@ -129,6 +129,7 @@ class AppDropdownField extends StatelessWidget {
   final List<DropdownMenuItem<dynamic>> items;
   final String? hintText;
   final void Function(dynamic value) onChanged;
+
   const AppDropdownField({
     Key? key,
     required this.items,
@@ -139,6 +140,7 @@ class AppDropdownField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
+      menuMaxHeight: 250,
       elevation: 12,
       borderRadius: BorderRadius.circular(10),
       items: items,
