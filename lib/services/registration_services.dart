@@ -48,7 +48,7 @@ class RegistrationServices {
             () => const MainPage(),
           );
         } else {
-          AppSnackbar.snackbar(title: "Error", message: data['message']);
+          AppSnackbar.snackbar(title: "Error", message: data['error'] ?? data['message']);
         }
       },
     ).catchError(
@@ -100,8 +100,7 @@ class RegistrationServices {
       },
     ).then((value) {
       if (value.statusCode == 200) {
-        AppSnackbar.snackbar(
-            title: "Message", message: "OTP has been sent successfully!");
+        AppSnackbar.snackbar(title: "Message", message: "OTP has been sent successfully!");
         Get.to(
           () => OtpScreen(
             isSignUp: isSignUp,
@@ -132,8 +131,7 @@ class RegistrationServices {
       },
     ).then((value) async {
       if (value.statusCode == 200) {
-        AppSnackbar.snackbar(
-            title: "Message", message: "OTP has been veified successfully!");
+        AppSnackbar.snackbar(title: "Message", message: "OTP has been veified successfully!");
 
         await updateUserStatus(
           email: email,

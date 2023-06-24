@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:car_rental/main.dart';
-import 'package:car_rental/models/user_model.dart';
 import 'package:car_rental/views/home/main_screens/profile_views/create_car.dart';
 import 'package:car_rental/views/home/main_screens/profile_views/my_cars.dart';
 import 'package:car_rental/views/home/main_screens/profile_views/update_profile.dart';
@@ -12,6 +11,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/app_spacing.dart';
+import '../../../models/user_model.dart';
 import '../../../widgets/app_cached_image.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -69,10 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 leading: SvgPicture.asset(
                   "assets/icons/user.svg",
                   // ignore: deprecated_member_use
-                  color: Theme.of(context)
-                      .bottomNavigationBarTheme
-                      .selectedIconTheme!
-                      .color,
+                  color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
                 ),
                 title: const AppText(
                   text: "Update profile",
@@ -97,10 +94,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 leading: SvgPicture.asset(
                   "assets/icons/upload.svg",
                   // ignore: deprecated_member_use
-                  color: Theme.of(context)
-                      .bottomNavigationBarTheme
-                      .selectedIconTheme!
-                      .color,
+                  color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
                 ),
                 title: const AppText(
                   text: "Upload a Car",
@@ -127,10 +121,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 40,
                   width: 40,
                   // ignore: deprecated_member_use
-                  color: Theme.of(context)
-                      .bottomNavigationBarTheme
-                      .selectedIconTheme!
-                      .color,
+                  color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
                 ),
                 title: const AppText(
                   text: "My Cars Collection",

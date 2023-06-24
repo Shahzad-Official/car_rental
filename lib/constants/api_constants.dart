@@ -1,5 +1,5 @@
 class ApiConstants {
-  static const baseUrl = "http://192.168.216.70:3000";
+  static const baseUrl = "http://192.168.182.70:3000";
 
   //auth endpoints
   static const login = "/auth/login";
@@ -19,4 +19,7 @@ class ApiConstants {
   //brand endpoints
   static const brand = "/brand";
   static const brandCars = "/brand/cars";
+
+  //Bookings endpoints
+  static const booking = "/booking";
 }

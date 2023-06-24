@@ -43,6 +43,11 @@ dependencies:
   #local_database
   hive_flutter: any
 
+  #locations
+  google_maps_flutter: ^2.3.1
+  place_picker: ^0.10.0
+  geolocator: any
+
 
 dev_dependencies:
   flutter_test:

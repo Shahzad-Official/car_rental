@@ -21,8 +21,7 @@ class UpdateProfile extends StatefulWidget {
 }
 
 class _UpdateProfileState extends State<UpdateProfile> {
-  final UpdateProfileController _controller =
-      Get.put(UpdateProfileController());
+  final UpdateProfileController _controller = Get.put(UpdateProfileController());
   initializeData() {
     _controller.firstName.text = userData.firstname.toString();
     _controller.lastName.text = userData.lastname.toString();
@@ -73,8 +72,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     return CircleAvatar(
                       radius: 70,
                       backgroundColor: Colors.transparent,
-                      backgroundImage:
-                          _.profile != null ? FileImage(_.profile!) : null,
+                      backgroundImage: _.profile != null ? FileImage(_.profile!) : null,
                       child: _.profile != null
                           ? Align(
                               alignment: Alignment.bottomRight,
@@ -93,10 +91,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                       },
                                       icon: Icon(
                                         Icons.edit,
-                                        color: Theme.of(context)
-                                            .textTheme
-                                            .bodyMedium!
-                                            .color,
+                                        color: Theme.of(context).textTheme.bodyMedium!.color,
                                       ),
                                     ),
                                   ),
@@ -129,10 +124,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                                           },
                                           icon: Icon(
                                             Icons.edit,
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyMedium!
-                                                .color,
+                                            color: Theme.of(context).textTheme.bodyMedium!.color,
                                           ),
                                         ),
                                       ),

@@ -1,8 +1,13 @@
+import 'dart:ui' as ui;
+import 'package:car_rental/controllers/booking_controller.dart';
 import 'package:car_rental/models/car_model.dart';
 import 'package:car_rental/widgets/app_button.dart';
 import 'package:car_rental/widgets/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../../../constants/app_spacing.dart';
 import '../../../../widgets/app_cached_image.dart';
@@ -19,16 +24,29 @@ class SingleCarView extends StatelessWidget {
     this.savedCarData,
     this.isMyCar = false,
   }) : super(key: key);
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
+  }
+
+  Future<BitmapDescriptor> createIcon() async {
+    Uint8List unit8list = await getBytesFromAsset(
+      "assets/images/car_map.png",
+      70,
+    );
+    return BitmapDescriptor.fromBytes(unit8list);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        leading: BackButton(
-          color: Theme.of(context).iconTheme.color,
+        leading: const BackButton(),
+        title: const AppText(
+          text: "Car Details",
         ),
-        elevation: 0,
       ),
       body: Padding(
         padding: AppSpacing.defaultPadding,
@@ -109,6 +127,58 @@ class SingleCarView extends StatelessWidget {
                   ),
                 ],
               ),
+              AppSpacing.heightSpace5,
+              const AppText(
+                text: "Car Location",
+                fontSize: 17,
+                fontWeight: FontWeight.w600,
+              ),
+              Card(
+                elevation: 5,
+                shape: BeveledRectangleBorder(
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                child: Container(
+                  padding: const EdgeInsets.all(10),
+                  height: 300,
+                  width: double.maxFinite,
+                  child: FutureBuilder<BitmapDescriptor>(
+                      future: createIcon(),
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        } else {
+                          return GoogleMap(
+                            markers: {
+                              Marker(
+                                markerId: const MarkerId("1"),
+                                icon: snapshot.data!,
+                                position: LatLng(
+                                    carData == null
+                                        ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
+                                        : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
+                                    carData == null
+                                        ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
+                                        : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
+                              ),
+                            },
+                            initialCameraPosition: CameraPosition(
+                              zoom: 14,
+                              target: LatLng(
+                                  carData == null
+                                      ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
+                                      : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
+                                  carData == null
+                                      ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
+                                      : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
+                            ),
+                          );
+                        }
+                      }),
+                ),
+              ),
               AppSpacing.heightSpace20,
               Card(
                 elevation: 5,
@@ -138,9 +208,21 @@ class SingleCarView extends StatelessWidget {
                                   ],
                                 ),
                                 actions: [
-                                  AppButton(
-                                    onTap: () {},
-                                    text: "Rent Now",
+                                  GetBuilder<BookingController>(
+                                    init: BookingController(),
+                                    initState: (_) {},
+                                    builder: (_) {
+                                      return AppButton(
+                                        isLoading: _.isLoading,
+                                        onTap: () async {
+                                          await _.bookNow(
+                                            carId: carData == null ? savedCarData![index].sId.toString() : carData!.data![index].sId.toString(),
+                                            days: 1,
+                                          );
+                                        },
+                                        text: "Rent Now",
+                                      );
+                                    },
                                   ),
                                 ],
                               );
@@ -191,9 +273,21 @@ class SingleCarView extends StatelessWidget {
                                   ],
                                 ),
                                 actions: [
-                                  AppButton(
-                                    onTap: () {},
-                                    text: "Rent Now",
+                                  GetBuilder<BookingController>(
+                                    init: BookingController(),
+                                    initState: (_) {},
+                                    builder: (_) {
+                                      return AppButton(
+                                        isLoading: _.isLoading,
+                                        onTap: () async {
+                                          await _.bookNow(
+                                            carId: carData == null ? savedCarData![index].sId.toString() : carData!.data![index].sId.toString(),
+                                            days: 3,
+                                          );
+                                        },
+                                        text: "Rent Now",
+                                      );
+                                    },
                                   ),
                                 ],
                               );
@@ -244,9 +338,21 @@ class SingleCarView extends StatelessWidget {
                                   ],
                                 ),
                                 actions: [
-                                  AppButton(
-                                    onTap: () {},
-                                    text: "Rent Now",
+                                  GetBuilder<BookingController>(
+                                    init: BookingController(),
+                                    initState: (_) {},
+                                    builder: (_) {
+                                      return AppButton(
+                                        isLoading: _.isLoading,
+                                        onTap: () async {
+                                          await _.bookNow(
+                                            carId: carData == null ? savedCarData![index].sId.toString() : carData!.data![index].sId.toString(),
+                                            days: 7,
+                                          );
+                                        },
+                                        text: "Rent Now",
+                                      );
+                                    },
                                   ),
                                 ],
                               );

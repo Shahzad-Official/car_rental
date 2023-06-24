@@ -13,8 +13,7 @@ import '../../widgets/app_text.dart';
 
 class SignUp extends StatelessWidget {
   SignUp({Key? key}) : super(key: key);
-  final ForgetPasswordController _controller =
-      Get.put(ForgetPasswordController());
+  final ForgetPasswordController _controller = Get.put(ForgetPasswordController());
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +44,7 @@ class SignUp extends StatelessWidget {
                       Center(
                         child: CircleAvatar(
                           radius: 70,
-                          backgroundImage:
-                              _.profile == null ? null : FileImage(_.profile!),
+                          backgroundImage: _.profile == null ? null : FileImage(_.profile!),
                           child: Align(
                             alignment: Alignment.bottomRight,
                             child: InkWell(
@@ -62,10 +60,7 @@ class SignUp extends StatelessWidget {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Icon(
                                     Icons.edit,
-                                    color: Theme.of(context)
-                                        .bottomNavigationBarTheme
-                                        .selectedIconTheme!
-                                        .color,
+                                    color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
                                   ),
                                 ),
                               ),
@@ -84,6 +79,18 @@ class SignUp extends StatelessWidget {
                         controller: _.lastname,
                         hintText: "LastName",
                         inputType: TextInputType.emailAddress,
+                      ),
+                      AppSpacing.heightSpace30,
+                      AppField(
+                        controller: _.address,
+                        readOnly: true,
+                        onTap: () async {
+                          await _.pickLocation(context);
+                        },
+                        hintText: "Location",
+                        suffixIcon: const Icon(
+                          Icons.location_on_rounded,
+                        ),
                       ),
                       AppSpacing.heightSpace30,
                       PhoneField(
@@ -111,9 +118,7 @@ class SignUp extends StatelessWidget {
                             _.viewPassword();
                           },
                           icon: Icon(
-                            _.isObsecure
-                                ? Icons.visibility_off_rounded
-                                : Icons.visibility_rounded,
+                            _.isObsecure ? Icons.visibility_off_rounded : Icons.visibility_rounded,
                           ),
                         ),
                       ),
@@ -128,9 +133,7 @@ class SignUp extends StatelessWidget {
                             _.viewCPassword();
                           },
                           icon: Icon(
-                            _.isObsecureCPassword
-                                ? Icons.visibility_off_rounded
-                                : Icons.visibility_rounded,
+                            _.isObsecureCPassword ? Icons.visibility_off_rounded : Icons.visibility_rounded,
                           ),
                         ),
                       ),

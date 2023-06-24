@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:car_rental/models/car_model.dart';
-import 'package:car_rental/models/user_model.dart';
 import 'package:car_rental/views/home/main_screens/car_views/single_car_view.dart';
 import 'package:car_rental/widgets/app_text.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,7 @@ import '../../../../constants/app_spacing.dart';
 import '../../../../controllers/main_page_controllers/home_page_controller.dart';
 import '../../../../main.dart';
 import '../../../../models/saved_car_model.dart';
+import '../../../../models/user_model.dart';
 import '../../../../services/brand_services.dart';
 import '../../../../widgets/app_cached_image.dart';
 
@@ -115,7 +115,11 @@ class _AllCarsState extends State<AllCars> {
                                     GestureDetector(
                                       onTap: () {
                                         Get.to(
-                                          () => SingleCarView(carData: carsData, index: index),
+                                          () => SingleCarView(
+                                            carData: carsData,
+                                            index: index,
+                                            isMyCar: userData.sId == carsData.data![index].creatorId.toString(),
+                                          ),
                                         );
                                       },
                                       child: Hero(

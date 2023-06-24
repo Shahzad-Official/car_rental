@@ -15,6 +15,7 @@ import 'package:car_rental/widgets/shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../models/user_model.dart';
 import '../../../services/brand_services.dart';
 import '../../../services/car_services.dart';
 
@@ -32,7 +33,12 @@ class _HomePageState extends State<HomePage> {
   final CarServices _carServices = CarServices();
   final BrandServices _brandServices = BrandServices();
   bool isLoading = false;
+
+  UserData userData = UserData();
   getData() async {
+    var data = jsonEncode(box.get("userData"));
+
+    userData = UserData.fromJson(jsonDecode(data));
     setState(() {
       isLoading = true;
     });
@@ -322,7 +328,11 @@ class _HomePageState extends State<HomePage> {
                                           InkWell(
                                             onTap: () {
                                               Get.to(
-                                                () => SingleCarView(carData: _carServices.carModel, index: index),
+                                                () => SingleCarView(
+                                                  carData: _carServices.carModel,
+                                                  index: index,
+                                                  isMyCar: userData.sId == _carServices.carModel.data![index].creatorId.toString(),
+                                                ),
                                               );
                                             },
                                             child: Hero(
@@ -332,38 +342,40 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             ),
                                           ),
-                                          Align(
-                                            alignment: Alignment.topRight,
-                                            child: Obx(
-                                              () {
-                                                initializeData();
-                                                _controller.isSaved[index].value = allSavedCars.any((el) => el.sId == _carServices.carModel.data![index].sId);
-                                                return IconButton(
-                                                  onPressed: () {
-                                                    if (_controller.isSaved[index].value) {
-                                                      _controller.isSaved[index].value = false;
-                                                      _controller.unsaved(
-                                                        box.get("savedCars"),
-                                                        _carServices.carModel.data![index],
+                                          userData.sId == _carServices.carModel.data![index].creatorId.toString()
+                                              ? const SizedBox()
+                                              : Align(
+                                                  alignment: Alignment.topRight,
+                                                  child: Obx(
+                                                    () {
+                                                      initializeData();
+                                                      _controller.isSaved[index].value = allSavedCars.any((el) => el.sId == _carServices.carModel.data![index].sId);
+                                                      return IconButton(
+                                                        onPressed: () {
+                                                          if (_controller.isSaved[index].value) {
+                                                            _controller.isSaved[index].value = false;
+                                                            _controller.unsaved(
+                                                              box.get("savedCars"),
+                                                              _carServices.carModel.data![index],
+                                                            );
+                                                          } else {
+                                                            _controller.isSaved[index].value = true;
+                                                            _controller.onSaved(index, _carServices.carModel.data![index]);
+                                                          }
+                                                        },
+                                                        icon: _controller.isSaved[index].value
+                                                            ? const Icon(
+                                                                Icons.bookmark_outlined,
+                                                                size: 30,
+                                                              )
+                                                            : const Icon(
+                                                                Icons.bookmark_border_rounded,
+                                                                size: 30,
+                                                              ),
                                                       );
-                                                    } else {
-                                                      _controller.isSaved[index].value = true;
-                                                      _controller.onSaved(index, _carServices.carModel.data![index]);
-                                                    }
-                                                  },
-                                                  icon: _controller.isSaved[index].value
-                                                      ? const Icon(
-                                                          Icons.bookmark_outlined,
-                                                          size: 30,
-                                                        )
-                                                      : const Icon(
-                                                          Icons.bookmark_border_rounded,
-                                                          size: 30,
-                                                        ),
-                                                );
-                                              },
-                                            ),
-                                          ),
+                                                    },
+                                                  ),
+                                                ),
                                         ],
                                       ),
                                     ),

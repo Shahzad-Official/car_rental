@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:car_rental/constants/app_spacing.dart';
 import 'package:car_rental/main.dart';
 import 'package:car_rental/models/car_model.dart';
@@ -26,8 +28,9 @@ class _SavedPageState extends State<SavedPage> {
     });
     if (box.get("savedCars") != null) {
       List list = await box.get("savedCars");
+
       for (var i in list) {
-        allCars.add(SingleCarModel.fromJson(i));
+        allCars.add(SingleCarModel.fromJson(jsonDecode(jsonEncode(i))));
       }
     } else {
       allCars = [];
@@ -47,6 +50,9 @@ class _SavedPageState extends State<SavedPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const AppText(text: "My Saved Cars"),
+      ),
       body: isLoading
           ? const Center(
               child: CircularProgressIndicator(),

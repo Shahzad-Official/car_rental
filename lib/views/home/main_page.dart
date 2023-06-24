@@ -1,4 +1,5 @@
 import 'package:car_rental/views/home/main_screens/home_page.dart';
+import 'package:car_rental/views/home/main_screens/my_bookings.dart';
 import 'package:car_rental/views/home/main_screens/profile_page.dart';
 import 'package:car_rental/views/home/main_screens/saved_page.dart';
 import 'package:car_rental/widgets/app_text.dart';
@@ -35,7 +36,8 @@ class _MainPageState extends State<MainPage> {
 
   int currentIndex = 0;
   List<Widget> get allPages => [
-        HomePage(),
+        const HomePage(),
+        const MyBookings(),
         const SavedPage(),
         const ProfilePage(),
       ];
@@ -71,6 +73,19 @@ class _MainPageState extends State<MainPage> {
           ),
           SalomonBottomBarItem(
             title: AppText(
+              text: "Bookings",
+              color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
+            ),
+            icon: SvgPicture.asset(
+              "assets/icons/bookings.svg",
+              height: 25,
+              width: 25,
+              // ignore: deprecated_member_use
+              color: selectedIndex == 1 ? Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color : Colors.grey,
+            ),
+          ),
+          SalomonBottomBarItem(
+            title: AppText(
               text: "Saved",
               color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
             ),
@@ -79,7 +94,7 @@ class _MainPageState extends State<MainPage> {
               height: 30,
               width: 30,
               // ignore: deprecated_member_use
-              color: selectedIndex == 1 ? Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color : Colors.grey,
+              color: selectedIndex == 2 ? Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color : Colors.grey,
             ),
           ),
           SalomonBottomBarItem(
@@ -91,7 +106,7 @@ class _MainPageState extends State<MainPage> {
               "assets/icons/user.svg", height: 30,
               width: 30,
               // ignore: deprecated_member_use
-              color: selectedIndex == 2 ? Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color : Colors.grey,
+              color: selectedIndex == 3 ? Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color : Colors.grey,
             ),
           ),
         ],

@@ -20,6 +20,9 @@ class ProfileServices {
     required String phoneCode,
     required String phoneCountry,
     required String phoneNumber,
+    required String address,
+    required String latitude,
+    required String longitude,
   }) async {
     Map<String, dynamic> data = {
       "profile": await dio.MultipartFile.fromFile(profile.path),
@@ -30,6 +33,9 @@ class ProfileServices {
       "phoneCode": phoneCode,
       "phoneCountry": phoneCountry,
       "phoneNumber": phoneNumber,
+      "address": address,
+      "latitude": latitude,
+      "longitude": longitude,
     };
 
     await Dio()
@@ -73,9 +79,7 @@ class ProfileServices {
       "phoneCountry": phoneCountry,
       "phoneNumber": phoneNumber,
       "profilePath": profilePath,
-      "profile": profile == null
-          ? profilePath
-          : await dio.MultipartFile.fromFile(profile.path),
+      "profile": profile == null ? profilePath : await dio.MultipartFile.fromFile(profile.path),
     };
 
     await Dio()

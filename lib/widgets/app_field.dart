@@ -1,5 +1,6 @@
 import 'package:car_rental/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:intl_phone_field/phone_number.dart';
@@ -13,6 +14,8 @@ class AppField extends StatelessWidget {
   final TextInputType? inputType;
   final void Function(String value)? onChanged;
   final int? maxLength, maxLines;
+  final bool readOnly;
+  final Callback? onTap;
   const AppField({
     Key? key,
     this.contentPadding,
@@ -25,11 +28,15 @@ class AppField extends StatelessWidget {
     this.onChanged,
     this.maxLength,
     this.maxLines = 1,
+    this.readOnly = false,
+    this.onTap,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: readOnly,
+      onTap: onTap,
       textAlign: TextAlign.start,
       maxLength: maxLength,
       maxLines: maxLines,
