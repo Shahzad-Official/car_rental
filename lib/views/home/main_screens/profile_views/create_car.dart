@@ -87,10 +87,12 @@ class _CreateCarState extends State<CreateCar> {
                                     const SizedBox(
                                       width: 10,
                                     ),
-                                    AppText(
-                                      fontSize: 20,
-                                      text: "Upload car thumbnail",
-                                      color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
+                                    Expanded(
+                                      child: AppText(
+                                        fontSize: 20,
+                                        text: "Upload car thumbnail",
+                                        color: Theme.of(context).bottomNavigationBarTheme.selectedIconTheme!.color,
+                                      ),
                                     ),
                                   ],
                                 ),

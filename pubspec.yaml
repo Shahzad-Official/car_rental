@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
 
+  intl: any
   cupertino_icons: ^1.0.2
   
   #state_management
@@ -35,10 +36,12 @@ dependencies:
   shimmer: any
 
   #network_utils
+  socket_io_client: ^2.0.2
   cached_network_image: any
   connectivity_plus: any
   dio: any 
   http: any
+  url_launcher: ^6.1.11
 
   #local_database
   hive_flutter: any
@@ -47,6 +50,7 @@ dependencies:
   google_maps_flutter: ^2.3.1
   place_picker: ^0.10.0
   geolocator: any
+  flutter_polyline_points: ^1.0.0
 
 
 dev_dependencies:

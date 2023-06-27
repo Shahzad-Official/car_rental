@@ -1,10 +1,10 @@
-import 'dart:ui' as ui;
 import 'package:car_rental/controllers/booking_controller.dart';
 import 'package:car_rental/models/car_model.dart';
+import 'package:car_rental/utils/maps_utils.dart';
 import 'package:car_rental/widgets/app_button.dart';
 import 'package:car_rental/widgets/app_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -24,20 +24,6 @@ class SingleCarView extends StatelessWidget {
     this.savedCarData,
     this.isMyCar = false,
   }) : super(key: key);
-  Future<Uint8List> getBytesFromAsset(String path, int width) async {
-    ByteData data = await rootBundle.load(path);
-    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(), targetWidth: width);
-    ui.FrameInfo fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!.buffer.asUint8List();
-  }
-
-  Future<BitmapDescriptor> createIcon() async {
-    Uint8List unit8list = await getBytesFromAsset(
-      "assets/images/car_map.png",
-      70,
-    );
-    return BitmapDescriptor.fromBytes(unit8list);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,19 +129,18 @@ class SingleCarView extends StatelessWidget {
                   height: 300,
                   width: double.maxFinite,
                   child: FutureBuilder<BitmapDescriptor>(
-                      future: createIcon(),
-                      builder: (context, snapshot) {
-                        if (!snapshot.hasData) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        } else {
-                          return GoogleMap(
-                            markers: {
-                              Marker(
-                                markerId: const MarkerId("1"),
-                                icon: snapshot.data!,
-                                position: LatLng(
+                    future: MapsUtils().createIcon(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return GoogleMap(
+                          onTap: (arg) {
+                            Get.to(
+                              () => CarMapView(
+                                latLng: LatLng(
                                     carData == null
                                         ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
                                         : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
@@ -163,10 +148,13 @@ class SingleCarView extends StatelessWidget {
                                         ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
                                         : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
                               ),
-                            },
-                            initialCameraPosition: CameraPosition(
-                              zoom: 14,
-                              target: LatLng(
+                            );
+                          },
+                          markers: {
+                            Marker(
+                              markerId: const MarkerId("1"),
+                              icon: snapshot.data!,
+                              position: LatLng(
                                   carData == null
                                       ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
                                       : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
@@ -174,9 +162,21 @@ class SingleCarView extends StatelessWidget {
                                       ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
                                       : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
                             ),
-                          );
-                        }
-                      }),
+                          },
+                          initialCameraPosition: CameraPosition(
+                            zoom: 14,
+                            target: LatLng(
+                                carData == null
+                                    ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
+                                    : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
+                                carData == null
+                                    ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
+                                    : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
+                          ),
+                        );
+                      }
+                    },
+                  ),
                 ),
               ),
               AppSpacing.heightSpace20,
@@ -218,6 +218,7 @@ class SingleCarView extends StatelessWidget {
                                           await _.bookNow(
                                             carId: carData == null ? savedCarData![index].sId.toString() : carData!.data![index].sId.toString(),
                                             days: 1,
+                                            price: carData == null ? savedCarData![index].pricePerDay.toString() : carData!.data![index].pricePerDay.toString(),
                                           );
                                         },
                                         text: "Rent Now",
@@ -283,6 +284,7 @@ class SingleCarView extends StatelessWidget {
                                           await _.bookNow(
                                             carId: carData == null ? savedCarData![index].sId.toString() : carData!.data![index].sId.toString(),
                                             days: 3,
+                                            price: carData == null ? savedCarData![index].priceHalfWeek.toString() : carData!.data![index].priceHalfWeek.toString(),
                                           );
                                         },
                                         text: "Rent Now",
@@ -348,6 +350,7 @@ class SingleCarView extends StatelessWidget {
                                           await _.bookNow(
                                             carId: carData == null ? savedCarData![index].sId.toString() : carData!.data![index].sId.toString(),
                                             days: 7,
+                                            price: carData == null ? savedCarData![index].pricePerWeek.toString() : carData!.data![index].pricePerWeek.toString(),
                                           );
                                         },
                                         text: "Rent Now",
@@ -378,6 +381,127 @@ class SingleCarView extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class CarMapView extends StatefulWidget {
+  final LatLng latLng;
+
+  const CarMapView({
+    Key? key,
+    required this.latLng,
+  }) : super(key: key);
+
+  @override
+  State<CarMapView> createState() => _CarMapViewState();
+}
+
+class _CarMapViewState extends State<CarMapView> {
+  // List<LatLng> polyLinePoints = [];
+
+  // getPolyPoints() async {
+  //   PolylinePoints polylinePoints = PolylinePoints();
+  //   PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+  //     "AIzaSyDq33g2UnBUqsMbCPvHT8imFd20IsLuel0", // Your Google Map Key
+  //     PointLatLng(widget.latLng.latitude, widget.latLng.longitude),
+  //     PointLatLng(currentPosition!.latitude, currentPosition!.longitude),
+  //   );
+  //   if (result.points.isNotEmpty) {
+  //     for (var point in result.points) {
+  //       polyLinePoints.add(
+  //         LatLng(point.latitude, point.longitude),
+  //       );
+  //     }
+  //     setState(() {});
+  //   }
+  // }
+
+  GoogleMapController? mapController;
+  // Position? currentPosition;
+
+  // Future<void> _getCurrentLocation() async {
+  //   await Geolocator.requestPermission();
+  //   LocationPermission permission = await Geolocator.checkPermission();
+  //   if (permission == LocationPermission.denied || permission == LocationPermission.deniedForever) {
+  //     await Geolocator.openAppSettings();
+  //     permission = await Geolocator.requestPermission();
+  //     if (permission != LocationPermission.whileInUse && permission != LocationPermission.always) {
+  //       // Handle permissions denied
+  //       return;
+  //     } else {
+  //       await Geolocator.openLocationSettings();
+  //     }
+  //   }
+
+  //   Position position = await Geolocator.getCurrentPosition(
+  //     desiredAccuracy: LocationAccuracy.high,
+  //   );
+
+  //   setState(() {
+  //     currentPosition = position;
+  //   });
+  //   await getPolyPoints();
+  // }
+
+  // @override
+  // void initState() {
+  //   _getCurrentLocation();
+
+  //   super.initState();
+  // }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const AppText(text: "Car Location"),
+      ),
+      body: FutureBuilder(
+        future: MapsUtils().createIcon(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return GoogleMap(
+              myLocationButtonEnabled: true,
+              myLocationEnabled: true,
+              onMapCreated: (controller) {
+                setState(() {
+                  mapController = controller;
+                });
+              },
+              // polylines: {
+              //   Polyline(
+              //     width: 5,
+              //     polylineId: PolylineId("1"),
+              //     color: Colors.blue,
+              //     points: polyLinePoints,
+              //   ),
+              // },
+              markers: {
+                Marker(
+                  markerId: const MarkerId("1"),
+                  position: widget.latLng,
+                  icon: snapshot.data!,
+                ),
+                // Marker(
+                //   markerId: const MarkerId("2"),
+                //   position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+                //   icon: BitmapDescriptor.defaultMarker,
+                // ),
+              },
+              initialCameraPosition: CameraPosition(
+                zoom: 14,
+                target: widget.latLng,
+              ),
+              compassEnabled: true,
+            );
+          }
+        },
       ),
     );
   }

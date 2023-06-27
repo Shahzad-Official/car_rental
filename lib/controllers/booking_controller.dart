@@ -7,10 +7,12 @@ class BookingController extends GetxController {
   bookNow({
     required String carId,
     required int days,
+    required String price,
   }) async {
     isLoading = true;
     update();
     await _services.makeBooking(
+      price: price,
       carId: carId,
       bookedOn: DateTime.now().toString(),
       duration: days.toString(),

@@ -34,7 +34,6 @@ class _MainPageState extends State<MainPage> {
     super.dispose();
   }
 
-  int currentIndex = 0;
   List<Widget> get allPages => [
         const HomePage(),
         const MyBookings(),
@@ -46,11 +45,7 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: PageView(
-          physics: const NeverScrollableScrollPhysics(),
-          controller: _pageController,
-          children: allPages,
-        ),
+        child: allPages[selectedIndex],
       ),
       extendBody: true,
       bottomNavigationBar: SalomonBottomBar(
@@ -114,11 +109,6 @@ class _MainPageState extends State<MainPage> {
           setState(() {
             selectedIndex = value;
           });
-          _pageController.animateToPage(
-            value,
-            curve: Curves.easeInOut,
-            duration: const Duration(milliseconds: 100),
-          );
         },
       ),
     );
