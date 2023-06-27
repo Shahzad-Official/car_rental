@@ -30,8 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
           () => StreamBuilder<ConnectivityResult>(
             stream: Connectivity().onConnectivityChanged,
             builder: (context, snapshot) {
-              if (snapshot.data == null ||
-                  snapshot.data == ConnectivityResult.none) {
+              if (snapshot.data == null || snapshot.data == ConnectivityResult.none) {
                 return const AppInternetError();
               } else {
                 return const MainPage();
@@ -41,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen> {
         );
       } else {
         Get.offAll(
-          const Login(),
+          () => const Login(),
         );
       }
     });

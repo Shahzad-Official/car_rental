@@ -1,4 +1,4 @@
-package com.example.car_rental
+package online.hexon.carrental
 
 import io.flutter.embedding.android.FlutterActivity
 
