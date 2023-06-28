@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:car_rental/constants/api_constants.dart';
 import 'package:car_rental/models/booking_model.dart';
+import 'package:car_rental/utils/app_snackbar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/adapters.dart';
@@ -32,8 +33,10 @@ class BookingServices {
       },
       body: body,
     ).then((value) {
+      var data = jsonDecode(value.body);
       if (value.statusCode == 200) {
         Get.back();
+        AppSnackbar.snackbar(title: "Message", message: data['message']);
       }
     }).catchError((err) {
       debugPrint("Booking error=> $err");

@@ -3,7 +3,10 @@ import 'package:url_launcher/url_launcher.dart';
 class UrlLauncherServices {
   static Future<bool> callUser(String number) async {
     return await launchUrl(
-      Uri.parse("tel:$number"),
+      Uri(
+        scheme: 'tel',
+        path: number,
+      ),
     );
   }
 
@@ -15,7 +18,10 @@ class UrlLauncherServices {
 
   static Future<bool> sendEmail(String email) async {
     return await launchUrl(
-      Uri.parse("mailto:$email"),
+      Uri(
+        scheme: 'mailto',
+        path: email,
+      ),
     );
   }
 }

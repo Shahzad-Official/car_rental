@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:car_rental/services/registration_services.dart';
+import 'package:car_rental/utils/app_snackbar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:flutter/foundation.dart';
@@ -97,6 +98,7 @@ class ProfileServices {
       var data = (value.data);
       debugPrint("profile updated=> $data");
       var userData = (data['data']);
+      AppSnackbar.snackbar(title: "Message", message: data['message']);
 
       box.put("userData", userData);
     }).catchError((err) {

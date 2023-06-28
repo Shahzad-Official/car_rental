@@ -3,7 +3,7 @@ import 'package:car_rental/constants/app_spacing.dart';
 import 'package:car_rental/models/booking_model.dart';
 import 'package:car_rental/services/url_launcher_services.dart';
 import 'package:car_rental/utils/date_utils.dart';
-import 'package:car_rental/widgets/app_cached_image.dart';
+
 import 'package:car_rental/widgets/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -113,10 +113,15 @@ class BookingDetails extends StatelessWidget {
                   ),
                   ListTile(
                     title: const AppText(text: "Brand Logo"),
-                    trailing: AppCachedImage(
-                      height: 50,
-                      width: 50,
-                      url: bookingData.brandData!.logo.toString(),
+                    trailing: SizedBox(
+                      height: 55,
+                      width: 55,
+                      child: Image.network(
+                        "${ApiConstants.baseUrl}/${bookingData.brandData!.logo}",
+                        cacheHeight: 500,
+                        cacheWidth: 500,
+                        fit: BoxFit.fill,
+                      ),
                     ),
                   ),
                   AppSpacing.heightSpace10,
@@ -205,7 +210,11 @@ class BookingDetails extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () async {
-                          await UrlLauncherServices.callUser("${bookingData.ownerData!.phoneCode}${bookingData.ownerData!.phoneNumber}");
+                          await UrlLauncherServices.callUser("${bookingData.ownerData!.phoneCode}${bookingData.ownerData!.phoneNumber}").then((value) {
+                            debugPrint("$value");
+                          }).catchError((err) {
+                            print(err);
+                          });
                         },
                         icon: SvgPicture.asset(
                           "assets/icons/call.svg",
