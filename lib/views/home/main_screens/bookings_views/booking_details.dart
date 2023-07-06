@@ -3,6 +3,7 @@ import 'package:car_rental/constants/app_spacing.dart';
 import 'package:car_rental/models/booking_model.dart';
 import 'package:car_rental/services/url_launcher_services.dart';
 import 'package:car_rental/utils/date_utils.dart';
+import 'package:car_rental/widgets/app_cached_image.dart';
 
 import 'package:car_rental/widgets/app_text.dart';
 import 'package:flutter/material.dart';
@@ -41,20 +42,10 @@ class BookingDetails extends StatelessWidget {
               child: Column(
                 children: [
                   AppSpacing.heightSpace10,
-                  // AppCachedImage(
-                  //   height: 200,
-                  //   width: 300,
-                  //   url: bookingData.carData!.thumbnail.toString(),
-                  // ),
-                  SizedBox(
+                  AppCachedImage(
                     height: 200,
                     width: 200,
-                    child: Image.network(
-                      "${ApiConstants.baseUrl}/${bookingData.carData!.thumbnail!}",
-                      cacheHeight: 500,
-                      cacheWidth: 500,
-                      fit: BoxFit.fill,
-                    ),
+                    url: bookingData.carData!.thumbnail!,
                   ),
                   ListTile(
                     visualDensity: const VisualDensity(vertical: -3),
@@ -150,18 +141,12 @@ class BookingDetails extends StatelessWidget {
               child: Column(
                 children: [
                   AppSpacing.heightSpace10,
-                  SizedBox(
+                  AppCachedImage(
                     height: 200,
                     width: 200,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(200),
-                      child: Image.network(
-                        "${ApiConstants.baseUrl}/${bookingData.ownerData!.profile!}",
-                        cacheHeight: 500,
-                        cacheWidth: 500,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
+                    fit: BoxFit.cover,
+                    shape: BoxShape.circle,
+                    url: bookingData.ownerData!.profile!,
                   ),
                   ListTile(
                     visualDensity: const VisualDensity(vertical: -3),
@@ -212,9 +197,7 @@ class BookingDetails extends StatelessWidget {
                         onPressed: () async {
                           await UrlLauncherServices.callUser("${bookingData.ownerData!.phoneCode}${bookingData.ownerData!.phoneNumber}").then((value) {
                             debugPrint("$value");
-                          }).catchError((err) {
-                            print(err);
-                          });
+                          }).catchError((err) {});
                         },
                         icon: SvgPicture.asset(
                           "assets/icons/call.svg",

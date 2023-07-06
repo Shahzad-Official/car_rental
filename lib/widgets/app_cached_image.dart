@@ -35,16 +35,24 @@ class AppCachedImage extends StatelessWidget {
         );
       },
       progressIndicatorBuilder: (context, url, progress) {
-        return Center(
-          child: CircularProgressIndicator(
-            value: progress.progress,
+        return SizedBox(
+          height: height,
+          width: width,
+          child: Center(
+            child: CircularProgressIndicator(
+              value: progress.progress,
+            ),
           ),
         );
       },
       errorWidget: (context, url, error) {
         debugPrint(error.toString());
-        return const Center(
-          child: Icon(Icons.error),
+        return SizedBox(
+          height: height,
+          width: width,
+          child: const Center(
+            child: Icon(Icons.error),
+          ),
         );
       },
     );

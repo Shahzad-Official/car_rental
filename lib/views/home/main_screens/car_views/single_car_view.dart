@@ -114,71 +114,75 @@ class SingleCarView extends StatelessWidget {
                 ],
               ),
               AppSpacing.heightSpace5,
-              const AppText(
-                text: "Car Location",
-                fontSize: 17,
-                fontWeight: FontWeight.w600,
-              ),
-              Card(
-                elevation: 5,
-                shape: BeveledRectangleBorder(
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                child: Container(
-                  padding: const EdgeInsets.all(10),
-                  height: 300,
-                  width: double.maxFinite,
-                  child: FutureBuilder<BitmapDescriptor>(
-                    future: MapsUtils().createIcon(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        return GoogleMap(
-                          onTap: (arg) {
-                            Get.to(
-                              () => CarMapView(
-                                latLng: LatLng(
-                                    carData == null
-                                        ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
-                                        : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
-                                    carData == null
-                                        ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
-                                        : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
-                              ),
-                            );
+              savedCarData![index].creator == null
+                  ? const SizedBox()
+                  : const AppText(
+                      text: "Car Location",
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600,
+                    ),
+              savedCarData![index].creator == null
+                  ? const SizedBox()
+                  : Card(
+                      elevation: 5,
+                      shape: BeveledRectangleBorder(
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: Container(
+                        padding: const EdgeInsets.all(10),
+                        height: 300,
+                        width: double.maxFinite,
+                        child: FutureBuilder<BitmapDescriptor>(
+                          future: MapsUtils().createIcon(),
+                          builder: (context, snapshot) {
+                            if (!snapshot.hasData) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else {
+                              return GoogleMap(
+                                onTap: (arg) {
+                                  Get.to(
+                                    () => CarMapView(
+                                      latLng: LatLng(
+                                          carData == null
+                                              ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
+                                              : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
+                                          carData == null
+                                              ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
+                                              : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
+                                    ),
+                                  );
+                                },
+                                markers: {
+                                  Marker(
+                                    markerId: const MarkerId("1"),
+                                    icon: snapshot.data!,
+                                    position: LatLng(
+                                        carData == null
+                                            ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
+                                            : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
+                                        carData == null
+                                            ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
+                                            : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
+                                  ),
+                                },
+                                initialCameraPosition: CameraPosition(
+                                  zoom: 14,
+                                  target: LatLng(
+                                      carData == null
+                                          ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
+                                          : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
+                                      carData == null
+                                          ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
+                                          : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
+                                ),
+                              );
+                            }
                           },
-                          markers: {
-                            Marker(
-                              markerId: const MarkerId("1"),
-                              icon: snapshot.data!,
-                              position: LatLng(
-                                  carData == null
-                                      ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
-                                      : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
-                                  carData == null
-                                      ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
-                                      : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
-                            ),
-                          },
-                          initialCameraPosition: CameraPosition(
-                            zoom: 14,
-                            target: LatLng(
-                                carData == null
-                                    ? double.parse(savedCarData![index].creator!.location!.latitude.toString())
-                                    : double.parse(carData!.data![index].creator!.location!.latitude.toString()),
-                                carData == null
-                                    ? double.parse(savedCarData![index].creator!.location!.longitude.toString())
-                                    : double.parse(carData!.data![index].creator!.location!.longitude.toString())),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ),
-              ),
+                        ),
+                      ),
+                    ),
               AppSpacing.heightSpace20,
               Card(
                 elevation: 5,
