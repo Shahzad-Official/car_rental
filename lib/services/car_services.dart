@@ -17,57 +17,117 @@ class CarServices {
   CarModel carModel = CarModel();
 
   getAllCars() async {
-    await get(
-      Uri.parse(ApiConstants.baseUrl + ApiConstants.car),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-    ).then(
-      (value) {
-        var data = jsonDecode(value.body);
-        debugPrint("All Cars Data => $data");
-        if (value.statusCode == 200) {
-          carModel = CarModel.fromJson(data);
-        } else {
-          AppSnackbar.snackbar(
-            title: "Error",
-            message: value.body.toString(),
-          );
-        }
-      },
-    ).catchError(
-      (err) {
-        debugPrint("All Cars service error=> $err");
-      },
-    );
+    if (box.get("allCars") == null) {
+      await get(
+        Uri.parse(ApiConstants.baseUrl + ApiConstants.car),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      ).then(
+        (value) {
+          var data = jsonDecode(value.body);
+          debugPrint("All Cars Data => $data");
+          if (value.statusCode == 200) {
+            carModel = CarModel.fromJson(data);
+            box.put("allCars", data);
+          } else {
+            AppSnackbar.snackbar(
+              title: "Error",
+              message: value.body.toString(),
+            );
+          }
+        },
+      ).catchError(
+        (err) {
+          debugPrint("All Cars service error=> $err");
+        },
+      );
+    } else {
+      var data = jsonDecode(jsonEncode(box.get("allCars")));
+      carModel = CarModel.fromJson(data);
+      get(
+        Uri.parse(ApiConstants.baseUrl + ApiConstants.car),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      ).then(
+        (value) {
+          var data = jsonDecode(value.body);
+          debugPrint("All Cars Data => $data");
+          if (value.statusCode == 200) {
+            box.put("allCars", data);
+          } else {
+            AppSnackbar.snackbar(
+              title: "Error",
+              message: value.body.toString(),
+            );
+          }
+        },
+      ).catchError(
+        (err) {
+          debugPrint("All Cars service error=> $err");
+        },
+      );
+    }
   }
 
   getMyCars() async {
-    await get(
-      Uri.parse(ApiConstants.baseUrl + ApiConstants.myCars),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-    ).then(
-      (value) {
-        var data = jsonDecode(value.body);
-        debugPrint("All Cars Data => $data");
-        if (value.statusCode == 200) {
-          carModel = CarModel.fromJson(data);
-        } else {
-          AppSnackbar.snackbar(
-            title: "Error",
-            message: value.body.toString(),
-          );
-        }
-      },
-    ).catchError(
-      (err) {
-        debugPrint("All Cars service error=> $err");
-      },
-    );
+    if (box.get("myCars") == null) {
+      await get(
+        Uri.parse(ApiConstants.baseUrl + ApiConstants.myCars),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      ).then(
+        (value) {
+          var data = jsonDecode(value.body);
+          debugPrint("All Cars Data => $data");
+          if (value.statusCode == 200) {
+            carModel = CarModel.fromJson(data);
+            box.put("myCars", data);
+          } else {
+            AppSnackbar.snackbar(
+              title: "Error",
+              message: value.body.toString(),
+            );
+          }
+        },
+      ).catchError(
+        (err) {
+          debugPrint("All Cars service error=> $err");
+        },
+      );
+    } else {
+      var data = jsonDecode(jsonEncode(box.get("myCars")));
+      carModel = CarModel.fromJson(data);
+      await get(
+        Uri.parse(ApiConstants.baseUrl + ApiConstants.myCars),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      ).then(
+        (value) {
+          var data = jsonDecode(value.body);
+          debugPrint("All Cars Data => $data");
+          if (value.statusCode == 200) {
+            box.put("myCars", data);
+          } else {
+            AppSnackbar.snackbar(
+              title: "Error",
+              message: value.body.toString(),
+            );
+          }
+        },
+      ).catchError(
+        (err) {
+          debugPrint("All Cars service error=> $err");
+        },
+      );
+    }
   }
 
   createCar(

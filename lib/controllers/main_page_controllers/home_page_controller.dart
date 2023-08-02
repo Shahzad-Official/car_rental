@@ -18,6 +18,23 @@ class HomePageController extends GetxController {
         "pricePerDay": data.pricePerDay,
         "priceHalfWeek": data.priceHalfWeek,
         "pricePerWeek": data.pricePerWeek,
+        "creator": {
+          "email": data.creator!.email,
+          "firstname": data.creator!.firstname,
+          "lastname": data.creator!.lastname,
+          "location": {
+            "latitude": data.creator?.location?.latitude,
+            "longitude": data.creator?.location?.longitude,
+            "address": data.creator?.location?.address,
+          },
+          "phoneCode": data.creator!.phoneCode,
+          "phoneCountry": data.creator!.phoneCountry,
+          "phoneNumber": data.creator!.phoneNumber,
+          "profile": data.creator!.profile,
+          "sId": data.creator!.sId,
+          "isVerified": data.creator!.isVerified,
+          "createdOn": data.creator!.createdOn,
+        },
         "creatorId": data.creatorId,
         "createdOn": data.createdOn,
       };

@@ -15,30 +15,60 @@ class BrandServices {
   String get token => box.get("loginToken");
   BrandModel brandModel = BrandModel();
   getAllBrands() async {
-    await get(
-      Uri.parse(ApiConstants.baseUrl + ApiConstants.brand),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-    ).then(
-      (value) {
-        var data = jsonDecode(value.body);
-        debugPrint("All Brands Data => $data");
-        if (value.statusCode == 200) {
-          brandModel = BrandModel.fromJson(data);
-        } else {
-          AppSnackbar.snackbar(
-            title: "Error",
-            message: value.body.toString(),
-          );
-        }
-      },
-    ).catchError(
-      (err) {
-        debugPrint("All Brands service error=> $err");
-      },
-    );
+    if (box.get("allBrands") == null) {
+      await get(
+        Uri.parse(ApiConstants.baseUrl + ApiConstants.brand),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      ).then(
+        (value) {
+          var data = jsonDecode(value.body);
+          debugPrint("All Brands Data => $data");
+          if (value.statusCode == 200) {
+            brandModel = BrandModel.fromJson(data);
+            box.put("allBrands", data);
+          } else {
+            AppSnackbar.snackbar(
+              title: "Error",
+              message: value.body.toString(),
+            );
+          }
+        },
+      ).catchError(
+        (err) {
+          debugPrint("All Brands service error=> $err");
+        },
+      );
+    } else {
+      var data = jsonDecode(jsonEncode(box.get("allBrands")));
+      brandModel = BrandModel.fromJson(data);
+      await get(
+        Uri.parse(ApiConstants.baseUrl + ApiConstants.brand),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      ).then(
+        (value) {
+          var data = jsonDecode(value.body);
+          debugPrint("All Brands Data => $data");
+          if (value.statusCode == 200) {
+            box.put("allBrands", data);
+          } else {
+            AppSnackbar.snackbar(
+              title: "Error",
+              message: value.body.toString(),
+            );
+          }
+        },
+      ).catchError(
+        (err) {
+          debugPrint("All Brands service error=> $err");
+        },
+      );
+    }
   }
 
   CarModel carModel = CarModel();
@@ -60,9 +90,6 @@ class BrandServices {
       debugPrint("Brand cars data=> ${jsonEncode(value.data)}");
       carModel = CarModel.fromJson(value.data);
     }).catchError((err) {
-      if (err.response != null) {
-        AppSnackbar.snackbar(message: err.response.data['message'].toString(), title: "Error");
-      }
       debugPrint("Brand cars error=> $err");
     });
   }
