@@ -1,5 +1,7 @@
 class ApiConstants {
-  static const baseUrl = "http://192.168.106.70:3000";
+  //This is a local ip address
+  //Use server ip here after deploying the api on the cloud
+  static const baseUrl = "http://192.168.123.70:3000";
 
   //auth endpoints
   static const login = "/auth/login";
